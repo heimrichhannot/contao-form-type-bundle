@@ -1,0 +1,34 @@
+{
+    "name": "heimrichhannot/contao-formgenerator-type-bundle",
+    "description": "Define form generator types to customize forms.",
+    "keywords": [
+        "contao",
+        "accessibility"
+    ],
+    "type": "contao-bundle",
+    "homepage": "https://github.com/heimrichhannot/contao-formgenerator-type-bundle",
+    "license": "LGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Heimrich & Hannot",
+            "email": "digitales@heimrich-hannot.de",
+            "homepage": "https://www.heimrich-hannot.de",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/heimrichhannot/contao-formgenerator-type-bundle/issues"
+    },
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "contao/core-bundle": "^4.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "HeimrichHannot\\FormgeneratorTypeBundle\\": "src/"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "HeimrichHannot\\FormgeneratorTypeBundle\\ContaoManager\\Plugin"
+    }
+}
