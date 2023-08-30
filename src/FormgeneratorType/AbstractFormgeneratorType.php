@@ -2,6 +2,9 @@
 
 namespace HeimrichHannot\FormgeneratorTypeBundle\FormgeneratorType;
 
+use Contao\FormModel;
+use HeimrichHannot\FormgeneratorTypeBundle\Event\PrepareFormDataEvent;
+use HeimrichHannot\FormgeneratorTypeBundle\Event\StoreFormDataEvent;
 use Symfony\Component\DependencyInjection\Container;
 
 abstract class AbstractFormgeneratorType implements FormgeneratorTypeInterface
@@ -19,8 +22,16 @@ abstract class AbstractFormgeneratorType implements FormgeneratorTypeInterface
         return Container::underscore($className);
     }
 
-    public function getDefaultFields(): array
+    public function getDefaultFields(FormModel $formModel): array
     {
         return [];
+    }
+
+    public function onPrepareFormData(PrepareFormDataEvent $event): void
+    {
+    }
+
+    public function onStoreFormData(StoreFormDataEvent $event): void
+    {
     }
 }

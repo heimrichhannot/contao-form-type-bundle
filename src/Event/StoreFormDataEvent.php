@@ -8,11 +8,13 @@ class StoreFormDataEvent
 {
     private array $data;
     private Form $form;
+    private array $files;
 
-    public function __construct(array $data, Form $form)
+    public function __construct(array $data, Form $form, array $files)
     {
         $this->data = $data;
         $this->form = $form;
+        $this->files = $files;
     }
 
     public function getData(): array
@@ -28,5 +30,10 @@ class StoreFormDataEvent
     public function getForm(): Form
     {
         return $this->form;
+    }
+
+    public function getFiles(): array
+    {
+        return $this->files;
     }
 }
