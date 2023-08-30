@@ -4,6 +4,8 @@ namespace HeimrichHannot\FormgeneratorTypeBundle\FormgeneratorType;
 
 use Contao\DataContainer;
 use Contao\FormModel;
+use HeimrichHannot\FormgeneratorTypeBundle\Event\PrepareFormDataEvent;
+use HeimrichHannot\FormgeneratorTypeBundle\Event\StoreFormDataEvent;
 
 interface FormgeneratorTypeInterface
 {
@@ -32,4 +34,10 @@ interface FormgeneratorTypeInterface
      * ```
      */
     public function getDefaultFields(FormModel $formModel): array;
+
+    public function onPrepareFormData(PrepareFormDataEvent $event): void;
+
+    public function onStoreFormData(StoreFormDataEvent $event): void;
+
+
 }
