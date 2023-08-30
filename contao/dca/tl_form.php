@@ -15,5 +15,5 @@ $dca['fields']['formgeneratorType'] = [
         'includeBlankOption' => true,
         'submitOnChange' => true,
     ],
-    'sql' => "varchar(16) NOT NULL default ''",
+    'sql' => "varchar(32) NOT NULL default ''",
 ];

@@ -1,0 +1,3 @@
+huh.formgenerator_type.controller:
+  resource: ../src/Controller
+  type: annotation

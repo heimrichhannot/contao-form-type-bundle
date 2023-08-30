@@ -26,6 +26,4 @@ class HeimrichHannotFormgeneratorTypeBundle extends Bundle
 
         $container->addCompilerPass(new FormgeneratorTypePass());
     }
-
-
 }
