@@ -1,6 +1,6 @@
 <?php
 
-namespace HeimrichHannot\FormgeneratorTypeBundle\Event;
+namespace HeimrichHannot\FormTypeBundle\Event;
 
 use Contao\Form;
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace HeimrichHannot\FormgeneratorTypeBundle\ContaoManager;
+namespace HeimrichHannot\FormTypeBundle\ContaoManager;
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use Contao\ManagerPlugin\Routing\RoutingPluginInterface;
-use HeimrichHannot\FormgeneratorTypeBundle\HeimrichHannotFormgeneratorTypeBundle;
+use HeimrichHannot\FormTypeBundle\HeimrichHannotFormTypeBundle;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -16,7 +16,7 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
     public function getBundles(ParserInterface $parser): array
     {
         return [
-            BundleConfig::create(HeimrichHannotFormgeneratorTypeBundle::class)
+            BundleConfig::create(HeimrichHannotFormTypeBundle::class)
                 ->setLoadAfter([ContaoCoreBundle::class])
         ];
     }

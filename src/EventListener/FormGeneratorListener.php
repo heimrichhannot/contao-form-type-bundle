@@ -1,22 +1,22 @@
 <?php
 
-namespace HeimrichHannot\FormgeneratorTypeBundle\EventListener;
+namespace HeimrichHannot\FormTypeBundle\EventListener;
 
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database;
 use Contao\Form;
-use HeimrichHannot\FormgeneratorTypeBundle\Event\PrepareFormDataEvent;
-use HeimrichHannot\FormgeneratorTypeBundle\Event\ProcessFormDataEvent;
-use HeimrichHannot\FormgeneratorTypeBundle\Event\StoreFormDataEvent;
-use HeimrichHannot\FormgeneratorTypeBundle\FormgeneratorType\FormgeneratorTypeCollection;
+use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
+use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 
 class FormGeneratorListener
 {
-    private FormgeneratorTypeCollection $formgeneratorTypeCollection;
+    private FormTypeCollection $formTypeCollection;
 
-    public function __construct(FormgeneratorTypeCollection $formgeneratorTypeCollection)
+    public function __construct(FormTypeCollection $formTypeCollection)
     {
-        $this->formgeneratorTypeCollection = $formgeneratorTypeCollection;
+        $this->formTypeCollection = $formTypeCollection;
     }
 
     /**
@@ -24,7 +24,7 @@ class FormGeneratorListener
      */
     public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form): void
     {
-        if ($form->formgeneratorType && $formType = $this->formgeneratorTypeCollection->getType($form->formgeneratorType)) {
+        if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
             $event = new PrepareFormDataEvent($submittedData, $labels, $fields, $form);
             $formType->onPrepareFormData($event);
             $submittedData = $event->getData();
@@ -36,7 +36,7 @@ class FormGeneratorListener
      */
     public function onStoreFormData(array $data, Form $form): array
     {
-        if ($form->formgeneratorType && $formType = $this->formgeneratorTypeCollection->getType($form->formgeneratorType)) {
+        if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
             $event = new StoreFormDataEvent($data, $form, $_SESSION['FILES'] ?? []);
             $formType->onStoreFormData($event);
             $data = $event->getData();
@@ -49,7 +49,7 @@ class FormGeneratorListener
      */
     public function onProcessFormData(array $submittedData, array $formData, ?array $files, array $labels, Form $form): void
     {
-        if ($form->formgeneratorType && $formType = $this->formgeneratorTypeCollection->getType($form->formgeneratorType)) {
+        if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
             $event = new ProcessFormDataEvent($submittedData, $formData, $files, $labels, $form);
             $formType->onProcessFormData($event);
         }

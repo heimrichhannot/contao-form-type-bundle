@@ -1,12 +1,11 @@
 <?php
 
-namespace HeimrichHannot\FormgeneratorTypeBundle\Controller;
+namespace HeimrichHannot\FormTypeBundle\Controller;
 
 use Contao\CoreBundle\Controller\AbstractController;
-use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\FormFieldModel;
 use Contao\FormModel;
-use HeimrichHannot\FormgeneratorTypeBundle\FormgeneratorType\FormgeneratorTypeCollection;
+use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,21 +17,21 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/contao/formgenerator-type/fieldwizard/", name="formgenerator_type_wizard", defaults={"_scope" = "backend", "_token_check" = true})
+ * @Route("/contao/form-type/fieldwizard/", name="form_type_wizard", defaults={"_scope" = "backend", "_token_check" = true})
  */
 class CreateDefaultFormController extends AbstractController
 {
     private Security $security;
-    private FormgeneratorTypeCollection $formgeneratorTypeCollection;
+    private FormTypeCollection $formTypeCollection;
     private UrlGeneratorInterface $urlGenerator;
     private CsrfTokenManagerInterface $csrfTokenManager;
     private ParameterBagInterface $parameterBag;
     private TranslatorInterface $translator;
 
-    public function __construct(Security $security, FormgeneratorTypeCollection $formgeneratorTypeCollection, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, ParameterBagInterface $parameterBag, TranslatorInterface $translator)
+    public function __construct(Security $security, FormTypeCollection $formTypeCollection, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, ParameterBagInterface $parameterBag, TranslatorInterface $translator)
     {
         $this->security = $security;
-        $this->formgeneratorTypeCollection = $formgeneratorTypeCollection;
+        $this->formTypeCollection = $formTypeCollection;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->parameterBag = $parameterBag;
@@ -61,9 +60,9 @@ class CreateDefaultFormController extends AbstractController
             return new Response('Form already has fields', 400);
         }
 
-        $type = $this->formgeneratorTypeCollection->getType($formModel->formgeneratorType);
+        $type = $this->formTypeCollection->getType($formModel->formType);
         if (!$type) {
-            return new Response('Formgenerator type not found', 404);
+            return new Response('Form type not found', 404);
         }
 
         $fields = $type->getDefaultFields($formModel);
@@ -96,7 +95,7 @@ class CreateDefaultFormController extends AbstractController
                 'pid' => $formModel->id,
                 'sorting' => $sorting++,
                 'type' => 'submit',
-                'slabel' => $this->translator->trans('MSC.FORMGENERATORTYPE.FORM.submit', [], 'contao_default'),
+                'slabel' => $this->translator->trans('MSC.FORMTYPE.FORM.submit', [], 'contao_default'),
             ]);
             $formFieldModel->save();
         }

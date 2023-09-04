@@ -1,27 +1,27 @@
 <?php
 
-namespace HeimrichHannot\FormgeneratorTypeBundle\FormgeneratorType;
+namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\DataContainer;
 use Contao\FormModel;
-use HeimrichHannot\FormgeneratorTypeBundle\Event\PrepareFormDataEvent;
-use HeimrichHannot\FormgeneratorTypeBundle\Event\ProcessFormDataEvent;
-use HeimrichHannot\FormgeneratorTypeBundle\Event\StoreFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 
-interface FormgeneratorTypeInterface
+interface FormTypeInterface
 {
     /**
-     * Return the type name of the formgenerator type.
+     * Return the type name of the form type.
      */
     public function getType(): string;
 
     /**
-     * Adjust the backend dca for the current formgenerator type.
+     * Adjust the backend dca for the current form type.
      */
     public function onload(DataContainer $dataContainer, FormModel $formModel): void;
 
     /**
-     * Return the default fields for the current formgenerator type. Will be used for the first time wizard
+     * Return the default fields for the current form type. Will be used for the first time wizard
      *
      * Example:
      * ```php

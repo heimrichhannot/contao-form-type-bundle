@@ -1,8 +1,8 @@
 services:
-  HeimrichHannot\FormgeneratorTypeBundle\:
+  HeimrichHannot\FormTypeBundle\:
     resource: '../src/{Controller,EventListener}/*'
     autoconfigure: true
     autowire: true
 
-  HeimrichHannot\FormgeneratorTypeBundle\FormgeneratorType\FormgeneratorTypeCollection:
+  HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection:
     autowire: true

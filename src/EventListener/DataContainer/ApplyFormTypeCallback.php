@@ -1,28 +1,28 @@
 <?php
 
-namespace HeimrichHannot\FormgeneratorTypeBundle\EventListener\DataContainer;
+namespace HeimrichHannot\FormTypeBundle\EventListener\DataContainer;
 
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
 use Contao\FormFieldModel;
 use Contao\FormModel;
 use Contao\Message;
-use HeimrichHannot\FormgeneratorTypeBundle\FormgeneratorType\FormgeneratorTypeCollection;
+use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Callback(table="tl_form", target="config.onload")
  */
-class ApplyFormgeneratorTypeCallback
+class ApplyFormTypeCallback
 {
-    private FormgeneratorTypeCollection $formgeneratorTypeCollection;
+    private FormTypeCollection $formTypeCollection;
     private TranslatorInterface $translator;
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(FormgeneratorTypeCollection $formgeneratorTypeCollection, TranslatorInterface $translator, UrlGeneratorInterface $urlGenerator)
+    public function __construct(FormTypeCollection $formTypeCollection, TranslatorInterface $translator, UrlGeneratorInterface $urlGenerator)
     {
-        $this->formgeneratorTypeCollection = $formgeneratorTypeCollection;
+        $this->formTypeCollection = $formTypeCollection;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
     }
@@ -34,11 +34,11 @@ class ApplyFormgeneratorTypeCallback
         }
 
         $formModel = FormModel::findByPk($dc->id);
-        if (!$formModel->formgeneratorType) {
+        if (!$formModel->formType) {
             return;
         }
 
-        $type = $this->formgeneratorTypeCollection->getType($formModel->formgeneratorType);
+        $type = $this->formTypeCollection->getType($formModel->formType);
         if (!$type) {
             return;
         }
@@ -47,7 +47,7 @@ class ApplyFormgeneratorTypeCallback
 
         $formFields = FormFieldModel::findByPid($formModel->id);
 
-        $url = $this->urlGenerator->generate('formgenerator_type_wizard', [
+        $url = $this->urlGenerator->generate('form_type_wizard', [
             'formId' => $formModel->id,
         ]);
 

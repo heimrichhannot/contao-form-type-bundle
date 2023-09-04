@@ -1,14 +1,14 @@
 <?php
 
-namespace HeimrichHannot\FormgeneratorTypeBundle;
+namespace HeimrichHannot\FormTypeBundle;
 
-use HeimrichHannot\FormgeneratorTypeBundle\DependencyInjection\Compiler\FormgeneratorTypePass;
-use HeimrichHannot\FormgeneratorTypeBundle\DependencyInjection\HeimrichHannotFormgeneratorTypeExtension;
+use HeimrichHannot\FormTypeBundle\DependencyInjection\Compiler\FormTypePass;
+use HeimrichHannot\FormTypeBundle\DependencyInjection\HeimrichHannotFormTypeExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class HeimrichHannotFormgeneratorTypeBundle extends Bundle
+class HeimrichHannotFormTypeBundle extends Bundle
 {
     public function getPath(): string
     {
@@ -17,13 +17,13 @@ class HeimrichHannotFormgeneratorTypeBundle extends Bundle
 
     public function getContainerExtension(): ?ExtensionInterface
     {
-        return new HeimrichHannotFormgeneratorTypeExtension();
+        return new HeimrichHannotFormTypeExtension();
     }
 
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
 
-        $container->addCompilerPass(new FormgeneratorTypePass());
+        $container->addCompilerPass(new FormTypePass());
     }
 }

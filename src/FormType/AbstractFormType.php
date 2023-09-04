@@ -1,20 +1,20 @@
 <?php
 
-namespace HeimrichHannot\FormgeneratorTypeBundle\FormgeneratorType;
+namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\FormModel;
-use HeimrichHannot\FormgeneratorTypeBundle\Event\PrepareFormDataEvent;
-use HeimrichHannot\FormgeneratorTypeBundle\Event\StoreFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use Symfony\Component\DependencyInjection\Container;
 
-abstract class AbstractFormgeneratorType implements FormgeneratorTypeInterface
+abstract class AbstractFormType implements FormTypeInterface
 {
     public function getType(): string
     {
         $className = ltrim(strrchr(static::class, '\\'), '\\');
 
-        if ('FormgeneratorType' === substr($className, -17)) {
-            $className = substr($className, 0, -17);
+        if ('FormType' === substr($className, -8)) {
+            $className = substr($className, 0, -8);
         } elseif ('Type' === substr($className, -4)) {
             $className = substr($className, 0, -4);
         }
