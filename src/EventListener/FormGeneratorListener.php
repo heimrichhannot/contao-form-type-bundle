@@ -5,19 +5,42 @@ namespace HeimrichHannot\FormTypeBundle\EventListener;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database;
 use Contao\Form;
+use Contao\Widget;
+use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class FormGeneratorListener
 {
     private FormTypeCollection $formTypeCollection;
     private array $files = [];
+    private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(FormTypeCollection $formTypeCollection)
+    public function __construct(FormTypeCollection $formTypeCollection, EventDispatcherInterface $eventDispatcher)
     {
         $this->formTypeCollection = $formTypeCollection;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
+     * @Hook("loadFormField", priority=17)
+     */
+    public function onLoadFormField(Widget $widget, string $formId, array $formData, Form $form): Widget
+    {
+        if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
+            if (in_array($widget->type, ['select', 'radio', 'checkbox'])) {
+                /** @var FieldOptionsEvent $event */
+                $event = $this->eventDispatcher->dispatch(new FieldOptionsEvent($widget, $form, $widget->options), 'huh.form_type.'.$formType->getType().'.'.$widget->name.'.options');
+                if ($event->isDirty()) {
+                    $widget->options = $event->getOptions();
+                }
+            }
+        }
+
+        return $widget;
     }
 
     /**
