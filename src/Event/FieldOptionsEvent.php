@@ -65,13 +65,13 @@ class FieldOptionsEvent extends Event
     }
 
     /**
-     * Helper method for usage together with the dca field reference value.
+     * Set options by values. If a reference array is given, the values will be used as keys and the reference array as values.
      *
      * @param array $values The option values
-     * @param array $reference A language array
+     * @param array $reference A optional language array
      * @return void
      */
-    public function setOptionsWithReference(array $values, array $reference): void
+    public function setOptionsByValues(array $values, array $reference = []): void
     {
         $this->setOptions([]);
         foreach ($values as $option) {

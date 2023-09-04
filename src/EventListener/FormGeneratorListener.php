@@ -33,7 +33,10 @@ class FormGeneratorListener
         if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
             if (in_array($widget->type, ['select', 'radio', 'checkbox'])) {
                 /** @var FieldOptionsEvent $event */
-                $event = $this->eventDispatcher->dispatch(new FieldOptionsEvent($widget, $form, $widget->options), 'huh.form_type.'.$formType->getType().'.'.$widget->name.'.options');
+                $event = $this->eventDispatcher->dispatch(
+                    new FieldOptionsEvent($widget, $form, $widget->options),
+                    'huh.form_type.'.$formType->getType().'.'.str_replace('[]', '', $widget->name).'.options'
+            );
                 if ($event->isDirty()) {
                     $widget->options = $event->getOptions();
                 }
