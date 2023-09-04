@@ -21,7 +21,7 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
-        "contao/core-bundle": "^4.9 || ^5.0",
+        "contao/core-bundle": "^4.9 || ^5.0.8",
         "symfony/translation-contracts": "^1.0 || ^2.0 || ^3.0"
     },
     "autoload": {

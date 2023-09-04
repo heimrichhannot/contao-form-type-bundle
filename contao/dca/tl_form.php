@@ -12,6 +12,7 @@ PaletteManipulator::create()
 $dca['fields']['formType'] = [
     'inputType' => 'select',
     'reference' => &$GLOBALS['TL_LANG']['tl_form']['FORMTYPE'],
+    'filter' => true,
     'eval' => [
         'includeBlankOption' => true,
         'submitOnChange' => true,

@@ -13,6 +13,7 @@ use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 class FormGeneratorListener
 {
     private FormTypeCollection $formTypeCollection;
+    private array $files = [];
 
     public function __construct(FormTypeCollection $formTypeCollection)
     {
@@ -22,9 +23,14 @@ class FormGeneratorListener
     /**
      * @Hook("prepareFormData", priority=17)
      */
-    public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form): void
+    public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form, array $files = []): void
     {
         if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
+            if (version_compare('5.0', VERSION.'.'.BUILD)) {
+                $this->files[$form->formID] = $files;
+            } else {
+                $this->files[$form->formID] = $_SESSION['FILES'] ?? [];
+            }
             $event = new PrepareFormDataEvent($submittedData, $labels, $fields, $form);
             $formType->onPrepareFormData($event);
             $submittedData = $event->getData();
@@ -37,7 +43,7 @@ class FormGeneratorListener
     public function onStoreFormData(array $data, Form $form): array
     {
         if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
-            $event = new StoreFormDataEvent($data, $form, $_SESSION['FILES'] ?? []);
+            $event = new StoreFormDataEvent($data, $form, $this->files[$form->formID] ?? []);
             $formType->onStoreFormData($event);
             $data = $event->getData();
         }
