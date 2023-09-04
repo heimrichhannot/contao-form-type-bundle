@@ -5,8 +5,8 @@ $lang = &$GLOBALS['TL_LANG']['tl_form'];
 /**
  * Fields
  */
-$lang['formType'][0] = 'Formulargenerator-Typ';
-$lang['formType'][1] = 'Wählen Sie hier den Formulargenerator-Typ aus.';
+$lang['formType'][0] = 'Formular-Typ';
+$lang['formType'][1] = 'Wählen Sie hier den Formular-Typ aus.';
 
 /**
  * Legends

@@ -17,4 +17,11 @@ composer require heimrichhannot/contao-form-type-bundle
 
 Create a new class that implements the `FormTypeInterface` and register it as service with autoconfiguration enabled.
 
+A label can be set within `$GLOBALS['TL_LANG']['tl_form']['FORMTYPE']`:
+
+```php
+# contao/languages/de/tl_form.php
+$GLOBALS['TL_LANG']['tl_form']['FORMTYPE']['huh_mediathek'] = 'Mediathek';
+```
+
 
