@@ -3,7 +3,7 @@
     "description": "Add types to contao form generator.",
     "keywords": [
         "contao",
-        "accessibility"
+        "forms"
     ],
     "type": "contao-bundle",
     "homepage": "https://github.com/heimrichhannot/contao-form-type-bundle",
