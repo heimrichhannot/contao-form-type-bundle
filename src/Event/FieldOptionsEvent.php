@@ -83,6 +83,16 @@ class FieldOptionsEvent extends Event
         $this->dirty = true;
     }
 
+    public function setOptionsByKeyValue(array $options): void
+    {
+        $this->setOptions([]);
+        foreach ($options as $key => $value) {
+            $this->addOption($key, $value);
+        }
+
+        $this->dirty = true;
+    }
+
     public function setEmptyOption(bool $emptyOption, string $label = '-'): void
     {
         $this->emptyOption = $emptyOption;
