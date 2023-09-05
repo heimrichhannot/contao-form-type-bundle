@@ -12,6 +12,8 @@ class FieldOptionsEvent extends Event
     private Form $form;
     private array $options;
     private bool $dirty = false;
+    private bool $emptyOption = false;
+    private string $emptyOptionLabel = '-';
 
     public function __construct(Widget $widget, Form $form, array $options = [])
     {
@@ -79,5 +81,21 @@ class FieldOptionsEvent extends Event
         }
 
         $this->dirty = true;
+    }
+
+    public function setEmptyOption(bool $emptyOption, string $label = '-'): void
+    {
+        $this->emptyOption = $emptyOption;
+        $this->emptyOptionLabel = $label;
+    }
+
+    public function isEmptyOption(): bool
+    {
+        return $this->emptyOption;
+    }
+
+    public function getEmptyOptionLabel(): string
+    {
+        return $this->emptyOptionLabel;
     }
 }

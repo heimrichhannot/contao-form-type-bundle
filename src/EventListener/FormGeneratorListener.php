@@ -3,7 +3,6 @@
 namespace HeimrichHannot\FormTypeBundle\EventListener;
 
 use Contao\CoreBundle\ServiceAnnotation\Hook;
-use Contao\Database;
 use Contao\Form;
 use Contao\Widget;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
@@ -38,7 +37,11 @@ class FormGeneratorListener
                     'huh.form_type.'.$formType->getType().'.'.str_replace('[]', '', $widget->name).'.options'
             );
                 if ($event->isDirty()) {
-                    $widget->options = $event->getOptions();
+                    $options = $event->getOptions();
+                    if ($event->isEmptyOption()) {
+                        $options = array_merge([$event->createOptions('', $event->getEmptyOptionLabel())], $options);
+                    }
+                    $widget->options = $options;
                 }
             }
         }
