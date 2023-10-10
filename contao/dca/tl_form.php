@@ -19,3 +19,10 @@ $dca['fields']['formType'] = [
     ],
     'sql' => "varchar(32) NOT NULL default ''",
 ];
+$dca['fields']['allowEdit'] = [
+    'inputType' => 'checkbox',
+    'eval' => [
+        'tl_class' => 'w50',
+    ],
+    'sql' => "char(1) NOT NULL default ''",
+];

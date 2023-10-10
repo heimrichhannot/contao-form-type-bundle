@@ -41,4 +41,9 @@ interface FormTypeInterface
     public function onStoreFormData(StoreFormDataEvent $event): void;
 
     public function onProcessFormData(ProcessFormDataEvent $event): void;
+
+    /**
+     * Configure if the form can be used to edit existing entities.
+     */
+    public function editConfiguration(): false|FormEditConfiguration;
 }
