@@ -4,6 +4,7 @@ namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\FormModel;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -34,4 +35,10 @@ abstract class AbstractFormType implements FormTypeInterface
     public function onStoreFormData(StoreFormDataEvent $event): void
     {
     }
+
+    public function onProcessFormData(ProcessFormDataEvent $event): void
+    {
+    }
+
+
 }
