@@ -4,9 +4,11 @@ namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\DataContainer;
 use Contao\FormModel;
+use Contao\Widget;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\ValidateFormFieldEvent;
 
 interface FormTypeInterface
 {
@@ -41,4 +43,6 @@ interface FormTypeInterface
     public function onStoreFormData(StoreFormDataEvent $event): void;
 
     public function onProcessFormData(ProcessFormDataEvent $event): void;
+
+    public function onValidateFormField(ValidateFormFieldEvent $event): Widget;
 }

@@ -9,6 +9,7 @@ use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\ValidateFormFieldEvent;
 use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -88,5 +89,17 @@ class FormGeneratorListener
             $event = new ProcessFormDataEvent($submittedData, $formData, $files, $labels, $form);
             $formType->onProcessFormData($event);
         }
+    }
+
+    /**
+     * @Hook("validateFormField", priority=17)
+     */
+    public function onValidateFormField(Widget $widget, string $formId, array $formData, Form $form): Widget
+    {
+        if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
+            $event = new ValidateFormFieldEvent($widget, $formId, $formData, $form);
+            return $formType->onValidateFormField($event);
+        }
+        return $widget;
     }
 }
