@@ -3,9 +3,11 @@
 namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\FormModel;
+use Contao\Widget;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
+use HeimrichHannot\FormTypeBundle\Event\ValidateFormFieldEvent;
 use Symfony\Component\DependencyInjection\Container;
 
 abstract class AbstractFormType implements FormTypeInterface
@@ -40,5 +42,9 @@ abstract class AbstractFormType implements FormTypeInterface
     {
     }
 
+    public function onValidateFormField(ValidateFormFieldEvent $event): Widget
+    {
+        return $event->getWidget();
+    }
 
 }
