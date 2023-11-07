@@ -4,14 +4,18 @@ namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\DataContainer;
 use Contao\FormModel;
-use Contao\Widget;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
+use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
 use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ValidateFormFieldEvent;
 
+/**
+ * @internal Do not use this class in your code. It is only public for reasons of backward compatibility.
+ * @deprecated Use AbstractFormType instead.
+ */
 interface FormTypeInterface
 {
     /**
@@ -51,4 +55,6 @@ interface FormTypeInterface
     public function onCompileFormFields(CompileFormFieldsEvent $event): void;
 
     public function onLoadFormField(LoadFormFieldEvent $event): void;
+
+    public function onGetForm(GetFormEvent $event): void;
 }
