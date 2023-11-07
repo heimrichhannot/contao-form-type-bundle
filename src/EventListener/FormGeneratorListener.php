@@ -49,7 +49,8 @@ class FormGeneratorListener
             }
 
             $event = new LoadFormFieldEvent($widget, $formId, $formData, $form);
-            $widget = $formType->onLoadFormField($event);
+            $formType->onLoadFormField($event);
+            $widget = $event->getWidget();
         }
 
         return $widget;
@@ -103,7 +104,8 @@ class FormGeneratorListener
     {
         if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
             $event = new ValidateFormFieldEvent($widget, $formId, $formData, $form);
-            return $formType->onValidateFormField($event);
+            $formType->onValidateFormField($event);
+            $widget = $event->getWidget();
         }
         return $widget;
     }
@@ -115,7 +117,8 @@ class FormGeneratorListener
     {
         if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
             $event = new CompileFormFieldsEvent($fields, $formId, $form);
-            return $formType->onCompileFormFields($event);
+            $formType->onCompileFormFields($event);
+            $fields = $event->getFields();
         }
         return $fields;
     }

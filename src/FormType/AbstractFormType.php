@@ -44,19 +44,16 @@ abstract class AbstractFormType implements FormTypeInterface
     {
     }
 
-    public function onValidateFormField(ValidateFormFieldEvent $event): Widget
+    public function onValidateFormField(ValidateFormFieldEvent $event): void
     {
-        return $event->getWidget();
     }
 
-    public function onCompileFormFields(CompileFormFieldsEvent $event): array
+    public function onCompileFormFields(CompileFormFieldsEvent $event): void
     {
-        return $event->getFields();
     }
 
-    public function onLoadFormField(LoadFormFieldEvent $event): Widget
+    public function onLoadFormField(LoadFormFieldEvent $event): void
     {
-        return $event->getWidget();
     }
 
 }

@@ -46,9 +46,9 @@ interface FormTypeInterface
 
     public function onProcessFormData(ProcessFormDataEvent $event): void;
 
-    public function onValidateFormField(ValidateFormFieldEvent $event): Widget;
+    public function onValidateFormField(ValidateFormFieldEvent $event): void;
 
-    public function onCompileFormFields(CompileFormFieldsEvent $event): array;
+    public function onCompileFormFields(CompileFormFieldsEvent $event): void;
 
-    public function onLoadFormField(LoadFormFieldEvent $event): Widget;
+    public function onLoadFormField(LoadFormFieldEvent $event): void;
 }
