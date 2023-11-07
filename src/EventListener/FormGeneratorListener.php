@@ -4,9 +4,11 @@ namespace HeimrichHannot\FormTypeBundle\EventListener;
 
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Form;
+use Contao\FormModel;
 use Contao\Widget;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
+use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
 use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
@@ -121,6 +123,19 @@ class FormGeneratorListener
             $fields = $event->getFields();
         }
         return $fields;
+    }
+
+    /**
+     * @Hook("getForm", priority=17)
+     */
+    public function onGetForm(FormModel $formModel, string $buffer, Form $form): string
+    {
+        if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
+            $event = new GetFormEvent($formModel, $buffer, $form);
+            $formType->onGetForm($event);
+            $buffer = $event->getBuffer();
+        }
+        return $buffer;
     }
 
 }
