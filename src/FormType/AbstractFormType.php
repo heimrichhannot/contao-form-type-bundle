@@ -4,6 +4,8 @@ namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\FormModel;
 use Contao\Widget;
+use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
+use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
@@ -42,9 +44,16 @@ abstract class AbstractFormType implements FormTypeInterface
     {
     }
 
-    public function onValidateFormField(ValidateFormFieldEvent $event): Widget
+    public function onValidateFormField(ValidateFormFieldEvent $event): void
     {
-        return $event->getWidget();
+    }
+
+    public function onCompileFormFields(CompileFormFieldsEvent $event): void
+    {
+    }
+
+    public function onLoadFormField(LoadFormFieldEvent $event): void
+    {
     }
 
 }

@@ -5,7 +5,9 @@ namespace HeimrichHannot\FormTypeBundle\EventListener;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Form;
 use Contao\Widget;
+use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
+use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
@@ -36,7 +38,7 @@ class FormGeneratorListener
                 $event = $this->eventDispatcher->dispatch(
                     new FieldOptionsEvent($widget, $form, $widget->options),
                     'huh.form_type.'.$formType->getType().'.'.str_replace('[]', '', $widget->name).'.options'
-            );
+                );
                 if ($event->isDirty()) {
                     $options = $event->getOptions();
                     if ($event->isEmptyOption()) {
@@ -45,6 +47,10 @@ class FormGeneratorListener
                     $widget->options = $options;
                 }
             }
+
+            $event = new LoadFormFieldEvent($widget, $formId, $formData, $form);
+            $formType->onLoadFormField($event);
+            $widget = $event->getWidget();
         }
 
         return $widget;
@@ -98,8 +104,23 @@ class FormGeneratorListener
     {
         if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
             $event = new ValidateFormFieldEvent($widget, $formId, $formData, $form);
-            return $formType->onValidateFormField($event);
+            $formType->onValidateFormField($event);
+            $widget = $event->getWidget();
         }
         return $widget;
     }
+
+    /**
+     * @Hook("compileFormFields", priority=17)
+     */
+    public function onCompileFormFields(array $fields, string $formId, Form $form): array
+    {
+        if ($form->formType && $formType = $this->formTypeCollection->getType($form->formType)) {
+            $event = new CompileFormFieldsEvent($fields, $formId, $form);
+            $formType->onCompileFormFields($event);
+            $fields = $event->getFields();
+        }
+        return $fields;
+    }
+
 }
