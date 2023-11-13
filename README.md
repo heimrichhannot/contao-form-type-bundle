@@ -7,7 +7,7 @@ It is aimed at developers and contains no build-in form types.
 * Generic way to create forms for specific approaches with contao form generator
 * Options event for select, checkbox and radio form fields
 * Form types can support a first time wizard to setup basic form fields
-* Unified dispatcher for Symfony `FieldOptionsEvent` and Contao callbacks
+* Unified dispatcher for `FieldOptionsEvent` and Contao callbacks
 
 ## Installation
 
@@ -84,7 +84,7 @@ class OptionsEventListener implements EventSubscriberInterface
 
 ### Unified Dispatcher for Field Options
 
-Use `FieldOptionsDispatcherTrait` to dispatch Symfony `FieldOptionsEvent` `huh.form_type.<formtype>.<field>.options` and Contao `fields.<field>.options` callbacks alike.
+Use `FieldOptionsDispatcherTrait` to dispatch `FieldOptionsEvent` `huh.form_type.<formtype>.<field>.options` and Contao `fields.<field>.options` callbacks alike.
 
 
 Example:
