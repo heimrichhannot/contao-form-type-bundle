@@ -38,11 +38,9 @@ trait FieldOptionsDispatcherTrait
             $funcArgs = $backtrace[1]['args'];
         }
 
-        $fieldOptionsEvents = array_filter($funcArgs, function ($arg) {
-            return $arg instanceof FieldOptionsEvent;
-        });
+        $event = !is_array($funcArgs) ?: reset($funcArgs);
 
-        foreach ($fieldOptionsEvents as $event) {
+        if ($event instanceof FieldOptionsEvent) {
             $event->setOptionsByKeyValue($options);
             $event->setEmptyOption($setEmptyOption);
         }
