@@ -29,7 +29,7 @@ trait FieldOptionsDispatcherTrait
      * @param array $options The options array to dispatch.
      * @param array|null $funcArgs The function arguments to check for FieldOptionsEvent instances. Defaults to the calling function's arguments.
      * @param bool $setEmptyOption Whether to set an empty option or not. Defaults to true.
-     * @return array The options array as passed to the function, so you can use it as return value with Symfony event listeners.
+     * @return array The options array as passed to the function, so it can be used as return value for Contao callbacks.
      */
     protected function dispatchFieldOptions(array $options, ?array $funcArgs = null, bool $setEmptyOption = true): array
     {
