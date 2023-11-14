@@ -4,9 +4,9 @@ Form type bundle is an extension for the Contao CMS to provide a generic way to 
 It is aimed at developers and contains no build-in form types.
 
 ## Feature
-* generic way to create forms for specific approaches with contao form generator
-* options event for select, checkbox and radio form fields
-* form types can support a first time wizard to setup basic form fields
+* Generic way to create forms for specific approaches with contao form generator
+* Options event for select, checkbox and radio form fields
+* Form types can support a first time wizard to setup basic form fields
 
 ## Installation
 
@@ -81,4 +81,27 @@ class OptionsEventListener implements EventSubscriberInterface
 }
 ```
 
+#### Unified Dispatcher for Field Options
 
+Use `FieldOptionsDispatcherTrait` to dispatch `FieldOptionsEvent` `huh.form_type.<formtype>.<field>.options` and Contao `fields.<field>.options` callbacks alike.
+
+
+Example:
+```php
+use HeimrichHannot\MediaLibraryBundle\Trait\FieldOptionsDispatcherTrait;
+
+class MyContainerOrFormType
+{
+    use FieldOptionsDispatcherTrait;
+
+    #[AsCallback(table: 'tl_ml_product', target: 'fields.licence.options')]
+    #[AsEventListener('huh.form_type.huh_media_library.licence.options')]
+    public function getLicenceOptions(): array
+    {
+        return $this->dispatchFieldOptions([
+            'free' => 'Released for use under indication of copyright',
+            'locked' => 'Subject to license'
+        ]);
+    }
+}
+```
