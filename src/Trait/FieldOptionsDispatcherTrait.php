@@ -47,4 +47,50 @@ trait FieldOptionsDispatcherTrait
 
         return $options;
     }
+
+    /**
+     * Shortcut for handling field options event listeners.
+     *
+     * Will look for a method called `get[FieldName]Options()` on a given object and call it. The called method must
+     * return an array of options. The given object defaults to `$this`, but you can hand it any DataContainer.
+     *
+     * Example:
+     * ```php
+     * #[AsEventListener('huh.form_type.huh_media_library.licence.options')]
+     * #[AsEventListener('huh.form_type.huh_media_library.company.options')]
+     * #[AsEventListener('huh.form_type.huh_media_library.location.options')]
+     * public function optionsCallback(FieldOptionsEvent $event): void
+     * {
+     *     $this->optionsListenerCallback($event, $this->productContainer);
+     * }
+     * ```
+     *
+     * The method name is derived from the field name, e.g. `getLicenceOptions()` for a field named `licence`.
+     *
+     * If you want to handle `FieldOptionsEvent` and Contao field options callbacks together, you may want to use
+     * `dispatchFieldOptions()` instead.
+     *
+     * @param FieldOptionsEvent $event
+     * @param object|null $container
+     * @return void
+     */
+    protected function optionsListenerCallback(FieldOptionsEvent $event, object $container = null): void
+    {
+        if ($container === null) {
+            $container = $this;
+        }
+
+        $methodName = 'get'.ucfirst(str_replace('[]', '', $event->getWidget()->name)).'Options';
+
+        if (method_exists($container, $methodName))
+        {
+            $options = $container->{$methodName}();
+            $event->setOptionsByKeyValue($options);
+            $event->setEmptyOption(true);
+        }
+        else
+        {
+            dump('[FieldOptionsDispatcherTrait] '.get_class($this).PHP_EOL."  Method $methodName does not exist on ".get_class($container));
+        }
+    }
 }
