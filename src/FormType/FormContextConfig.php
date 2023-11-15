@@ -38,7 +38,7 @@ class FormContextConfig
         FormContextEvaluatorInterface $contextEvaluator = null
     )
     {
-        $this->evaluator = $contextEvaluator ?? self::getDefaultContextEvaluator();
+        $this->evaluator = $contextEvaluator ?? static::getDefaultContextEvaluator();
     }
 
     public function getTable(): string
