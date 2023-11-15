@@ -4,10 +4,9 @@ namespace HeimrichHannot\FormTypeBundle\Event;
 
 use Contao\Form;
 
-class StoreFormDataEvent
+class StoreFormDataEvent extends AbstractFormEvent
 {
     private array $data;
-    private Form $form;
     private array $files;
 
     public function __construct(array $data, Form $form, array $files)
@@ -25,11 +24,6 @@ class StoreFormDataEvent
     public function setData(array $data): void
     {
         $this->data = $data;
-    }
-
-    public function getForm(): Form
-    {
-        return $this->form;
     }
 
     public function getFiles(): array
