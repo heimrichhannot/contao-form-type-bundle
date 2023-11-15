@@ -2,6 +2,7 @@
 
 namespace HeimrichHannot\FormTypeBundle\FormType;
 
+use Contao\DataContainer;
 use Contao\FormModel;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
 use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
@@ -31,6 +32,12 @@ abstract class AbstractFormType implements FormTypeInterface
     {
         return [];
     }
+
+    abstract public function onload(DataContainer $dataContainer, FormModel $formModel): void;
+
+    /* ========================================================================================================= *\
+     *   EVENT HANDLER                                                                                           *
+    \* ========================================================================================================= */
 
     public function onPrepareFormData(PrepareFormDataEvent $event): void
     {

@@ -24,11 +24,6 @@ interface FormTypeInterface
     public function getType(): string;
 
     /**
-     * Adjust the backend dca for the current form type.
-     */
-    public function onload(DataContainer $dataContainer, FormModel $formModel): void;
-
-    /**
      * Return the default fields for the current form type. Will be used for the first time wizard
      *
      * Example:
@@ -43,6 +38,11 @@ interface FormTypeInterface
      * ```
      */
     public function getDefaultFields(FormModel $formModel): array;
+
+    /**
+     * Adjust the backend dca for the current form type.
+     */
+    public function onload(DataContainer $dataContainer, FormModel $formModel): void;
 
     public function onPrepareFormData(PrepareFormDataEvent $event): void;
 
