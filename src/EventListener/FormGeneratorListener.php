@@ -6,7 +6,6 @@ use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Form;
 use Contao\FormModel;
 use Contao\Widget;
-use HeimrichHannot\FormTypeBundle\Event\AbstractFormEvent;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
 use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
@@ -15,9 +14,7 @@ use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ValidateFormFieldEvent;
-use HeimrichHannot\FormTypeBundle\FormType\AbstractFormType;
 use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class FormGeneratorListener
@@ -26,22 +23,9 @@ class FormGeneratorListener
 
     public function __construct(
         private readonly FormTypeCollection       $formTypeCollection,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly RequestStack             $requestStack
+        private readonly EventDispatcherInterface $eventDispatcher
     )
     {
-    }
-
-    private function evaluateFormContext(AbstractFormType $formType, AbstractFormEvent $event): void
-    {
-        $contextConfig = $formType->getFormContextConfig();
-
-        if ($contextConfig !== null)
-        {
-            $event->setFormContext(
-                $contextConfig->evaluate($this->requestStack->getCurrentRequest())
-            );
-        }
     }
 
     /**
@@ -87,7 +71,6 @@ class FormGeneratorListener
                 $this->files[$form->formID] = $_SESSION['FILES'] ?? [];
             }
             $event = new PrepareFormDataEvent($submittedData, $labels, $fields, $form);
-            $this->evaluateFormContext($formType, $event);
             $formType->onPrepareFormData($event);
             $submittedData = $event->getData();
         }
@@ -101,7 +84,6 @@ class FormGeneratorListener
         if ($formType = $this->formTypeCollection->getTypeOfForm($form))
         {
             $event = new StoreFormDataEvent($data, $form, $this->files[$form->formID] ?? []);
-            $this->evaluateFormContext($formType, $event);
             $formType->onStoreFormData($event);
             $data = $event->getData();
         }
@@ -116,7 +98,6 @@ class FormGeneratorListener
         if ($formType = $this->formTypeCollection->getTypeOfForm($form))
         {
             $event = new ProcessFormDataEvent($submittedData, $formData, $files, $labels, $form);
-            $this->evaluateFormContext($formType, $event);
             $formType->onProcessFormData($event);
         }
     }
@@ -157,7 +138,6 @@ class FormGeneratorListener
         if ($formType = $this->formTypeCollection->getTypeOfForm($form))
         {
             $event = new GetFormEvent($formModel, $buffer, $form);
-            $this->evaluateFormContext($formType, $event);
             $formType->onGetForm($event);
             $buffer = $event->getBuffer();
         }
