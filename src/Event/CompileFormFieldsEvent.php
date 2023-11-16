@@ -4,11 +4,10 @@ namespace HeimrichHannot\FormTypeBundle\Event;
 
 use Contao\Form;
 
-class CompileFormFieldsEvent
+class CompileFormFieldsEvent extends AbstractFormEvent
 {
     private array $fields;
     private string $formId;
-    private Form $form;
 
     public function __construct(array $fields, string $formId, Form $form)
     {
