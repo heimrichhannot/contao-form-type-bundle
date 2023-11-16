@@ -15,6 +15,8 @@ use Symfony\Component\DependencyInjection\Container;
 
 abstract class AbstractFormType implements FormTypeInterface
 {
+    private FormContext $formContext;
+
     public function getType(): string
     {
         $className = ltrim(strrchr(static::class, '\\'), '\\');
@@ -33,7 +35,15 @@ abstract class AbstractFormType implements FormTypeInterface
         return [];
     }
 
-    public function getFormContext(): FormContext
+    final public function getFormContext(): FormContext
+    {
+        if (!isset($this->formContext)) {
+            $this->formContext = $this->evaluateFormContext();
+        }
+        return $this->formContext;
+    }
+
+    protected function evaluateFormContext(): FormContext
     {
         return FormContext::create();
     }
