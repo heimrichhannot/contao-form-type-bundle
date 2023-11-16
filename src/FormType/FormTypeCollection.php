@@ -18,14 +18,21 @@ class FormTypeCollection
         return $this->types;
     }
 
-    public function getType(string $type): AbstractFormType|FormTypeInterface|null
+    public function getType(Form|string $formOrName): AbstractFormType|FormTypeInterface|null
+    {
+        return is_string($formOrName)
+            ? $this->getTypeByName($formOrName)
+            : $this->getTypeOfForm($formOrName);
+    }
+
+    public function getTypeByName(string $type): AbstractFormType|FormTypeInterface|null
     {
         return $this->types[$type] ?? null;
     }
 
     public function getTypeOfForm(Form $form): AbstractFormType|FormTypeInterface|null
     {
-        if ($form->formType && $formType = $this->getType($form->formType)) {
+        if ($form->formType && $formType = $this->getTypeByName($form->formType)) {
             return $formType;
         }
         return null;
