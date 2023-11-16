@@ -17,20 +17,20 @@ class FormContext
     }
 
     public function __construct(
-        private FormContextAction $context,
+        private FormContextAction $action,
         private ?Model            $model = null
     )
     {
     }
 
-    public function getContext(): FormContextAction
+    public function getAction(): FormContextAction
     {
-        return $this->context;
+        return $this->action;
     }
 
-    public function setContext(FormContextAction $context): void
+    public function setAction(FormContextAction $action): void
     {
-        $this->context = $context;
+        $this->action = $action;
     }
 
     public function getModel(): ?Model
@@ -45,11 +45,11 @@ class FormContext
 
     public function isEditContext(): bool
     {
-        return FormContextAction::EDIT === $this->context;
+        return FormContextAction::EDIT === $this->action;
     }
 
     public function isCreateContext(): bool
     {
-        return FormContextAction::CREATE === $this->context;
+        return FormContextAction::CREATE === $this->action;
     }
 }
