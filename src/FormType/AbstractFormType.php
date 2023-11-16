@@ -50,10 +50,6 @@ abstract class AbstractFormType implements FormTypeInterface
 
     abstract public function onload(DataContainer $dataContainer, FormModel $formModel): void;
 
-    /* ========================================================================================================= *\
-     *   EVENT HANDLER                                                                                           *
-    \* ========================================================================================================= */
-
     public function onPrepareFormData(PrepareFormDataEvent $event): void
     {
     }
