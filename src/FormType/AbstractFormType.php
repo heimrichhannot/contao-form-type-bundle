@@ -15,21 +15,6 @@ use Symfony\Component\DependencyInjection\Container;
 
 abstract class AbstractFormType implements FormTypeInterface
 {
-    private ?FormContextConfig $formContextConfig = null;
-
-    public static function createFormContextConfig(): ?FormContextConfig
-    {
-        return null;
-    }
-
-    public function getFormContextConfig(): ?FormContextConfig
-    {
-        if (null === $this->formContextConfig) {
-            $this->formContextConfig = static::createFormContextConfig();
-        }
-        return $this->formContextConfig;
-    }
-
     public function getType(): string
     {
         $className = ltrim(strrchr(static::class, '\\'), '\\');
@@ -46,6 +31,11 @@ abstract class AbstractFormType implements FormTypeInterface
     public function getDefaultFields(FormModel $formModel): array
     {
         return [];
+    }
+
+    public function getFormContext(): FormContext
+    {
+        return FormContext::create();
     }
 
     abstract public function onload(DataContainer $dataContainer, FormModel $formModel): void;
