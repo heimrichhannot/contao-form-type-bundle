@@ -33,7 +33,7 @@ class FormGeneratorListener
      */
     public function onLoadFormField(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
-        if ($formType = $this->formTypeCollection->getTypeOfForm($form))
+        if ($formType = $this->formTypeCollection->getType($form))
         {
             if (in_array($widget->type, ['select', 'radio', 'checkbox'])) {
                 /** @var FieldOptionsEvent $event */
@@ -63,7 +63,7 @@ class FormGeneratorListener
      */
     public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form, array $files = []): void
     {
-        if ($formType = $this->formTypeCollection->getTypeOfForm($form))
+        if ($formType = $this->formTypeCollection->getType($form))
         {
             if (version_compare('5.0', VERSION.'.'.BUILD)) {
                 $this->files[$form->formID] = $files;
@@ -81,7 +81,7 @@ class FormGeneratorListener
      */
     public function onStoreFormData(array $data, Form $form): array
     {
-        if ($formType = $this->formTypeCollection->getTypeOfForm($form))
+        if ($formType = $this->formTypeCollection->getType($form))
         {
             $event = new StoreFormDataEvent($data, $form, $this->files[$form->formID] ?? []);
             $formType->onStoreFormData($event);
@@ -95,7 +95,7 @@ class FormGeneratorListener
      */
     public function onProcessFormData(array $submittedData, array $formData, ?array $files, array $labels, Form $form): void
     {
-        if ($formType = $this->formTypeCollection->getTypeOfForm($form))
+        if ($formType = $this->formTypeCollection->getType($form))
         {
             $event = new ProcessFormDataEvent($submittedData, $formData, $files, $labels, $form);
             $formType->onProcessFormData($event);
@@ -107,7 +107,7 @@ class FormGeneratorListener
      */
     public function onValidateFormField(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
-        if ($formType = $this->formTypeCollection->getTypeOfForm($form))
+        if ($formType = $this->formTypeCollection->getType($form))
         {
             $event = new ValidateFormFieldEvent($widget, $formId, $formData, $form);
             $formType->onValidateFormField($event);
@@ -121,7 +121,7 @@ class FormGeneratorListener
      */
     public function onCompileFormFields(array $fields, string $formId, Form $form): array
     {
-        if ($formType = $this->formTypeCollection->getTypeOfForm($form))
+        if ($formType = $this->formTypeCollection->getType($form))
         {
             $event = new CompileFormFieldsEvent($fields, $formId, $form);
             $formType->onCompileFormFields($event);
@@ -135,7 +135,7 @@ class FormGeneratorListener
      */
     public function onGetForm(FormModel $formModel, string $buffer, Form $form): string
     {
-        if ($formType = $this->formTypeCollection->getTypeOfForm($form))
+        if ($formType = $this->formTypeCollection->getType($form))
         {
             $event = new GetFormEvent($formModel, $buffer, $form);
             $formType->onGetForm($event);
