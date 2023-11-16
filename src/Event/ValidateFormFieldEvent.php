@@ -43,10 +43,4 @@ class ValidateFormFieldEvent extends AbstractFormEvent
     {
         $this->formData = $formData;
     }
-
-    public function getForm(): Form
-    {
-        return $this->form;
-    }
-
 }

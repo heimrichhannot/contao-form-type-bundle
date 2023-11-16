@@ -30,10 +30,4 @@ class CompileFormFieldsEvent extends AbstractFormEvent
     {
         return $this->formId;
     }
-
-    public function getForm(): Form
-    {
-        return $this->form;
-    }
-
 }
