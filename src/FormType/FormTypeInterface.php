@@ -5,7 +5,6 @@ namespace HeimrichHannot\FormTypeBundle\FormType;
 use Contao\DataContainer;
 use Contao\FormModel;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
-use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
 use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
@@ -56,5 +55,4 @@ interface FormTypeInterface
 
     public function onLoadFormField(LoadFormFieldEvent $event): void;
 
-    public function onGetForm(GetFormEvent $event): void;
 }
