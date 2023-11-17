@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Container;
 
 abstract class AbstractFormType implements FormTypeInterface
 {
-    private FormContext $formContext;
+    use FormContextTrait;
 
     public function getType(): string
     {
@@ -35,17 +35,8 @@ abstract class AbstractFormType implements FormTypeInterface
         return [];
     }
 
-    final public function getFormContext(): FormContext
+    protected function evaluateFormContext(): void
     {
-        if (!isset($this->formContext)) {
-            $this->formContext = $this->evaluateFormContext();
-        }
-        return $this->formContext;
-    }
-
-    protected function evaluateFormContext(): FormContext
-    {
-        return FormContext::create();
     }
 
     abstract public function onload(DataContainer $dataContainer, FormModel $formModel): void;
