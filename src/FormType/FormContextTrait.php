@@ -6,7 +6,7 @@ use Contao\Model;
 
 trait FormContextTrait
 {
-    private FormContextAction $formContextAction = FormContextAction::CREATE;
+    private FormContextAction|string $formContextAction = FormContextAction::CREATE;
     private ?Model $formContextModel = null;
 
     public function getFormContextAction(): FormContextAction
@@ -14,7 +14,7 @@ trait FormContextTrait
         return $this->formContextAction;
     }
 
-    public function setFormContextAction(FormContextAction $formContextAction): void
+    public function setFormContextAction(FormContextAction|string $formContextAction): void
     {
         $this->formContextAction = $formContextAction;
     }
@@ -33,12 +33,12 @@ trait FormContextTrait
 
     final public function isContextEdit(): bool
     {
-        return FormContextAction::EDIT === $this->formContextAction;
+        return FormContextAction::UPDATE->equals($this->formContextAction);
     }
 
     final public function isContextCreate(): bool
     {
-        return FormContextAction::CREATE === $this->formContextAction;
+        return FormContextAction::CREATE->equals($this->formContextAction);
     }
 
 }
