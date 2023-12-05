@@ -33,6 +33,15 @@ abstract class AbstractFormType implements FormTypeInterface
         return [];
     }
 
+    final public function getFormContext(): FormContext
+    {
+        return $this->evaluateFormContext();
+    }
+
+    protected function evaluateFormContext(): FormContext {
+        return FormContext::create();
+    }
+
     abstract public function onload(DataContainer $dataContainer, FormModel $formModel): void;
 
     public function onPrepareFormData(PrepareFormDataEvent $event): void

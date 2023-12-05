@@ -9,6 +9,7 @@ enum FormContextAction: string
     case UPDATE = 'update';
     case DELETE = 'delete';
     case CLONE = 'clone';
+    case INVALID = 'invalid';
 
     public function equals(mixed $value): bool
     {
