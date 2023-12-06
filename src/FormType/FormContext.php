@@ -6,19 +6,29 @@ use Contao\Model;
 
 class FormContext
 {
-    public static function update(string $table, array $data): self
-    {
-        return new static(FormContextAction::UPDATE, $table, $data);
-    }
-
     public static function create(?string $table = null): self
     {
         return new static(FormContextAction::CREATE, $table);
     }
 
-    public static function invalid(?string $table = null): self
+    public static function read(string $table, array $data): self
     {
-        return new static(FormContextAction::INVALID, $table);
+        return new static(FormContextAction::READ, $table, $data);
+    }
+
+    public static function update(string $table, array $data): self
+    {
+        return new static(FormContextAction::UPDATE, $table, $data);
+    }
+
+    public static function delete(string $table, ?array $data = null): self
+    {
+        return new static(FormContextAction::DELETE, $table, $data);
+    }
+
+    public static function invalid(?string $table = null, mixed $detail = null, ?array $moreData = []): self
+    {
+        return new static(FormContextAction::INVALID, $table, ['_detail' => $detail, ...$moreData]);
     }
 
     public function __construct(
@@ -64,13 +74,28 @@ class FormContext
         $this->data = $data;
     }
 
-    public function isUpdateContext(): bool
+    public function isCreate(): bool
+    {
+        return FormContextAction::CREATE === $this->action;
+    }
+
+    public function isRead(): bool
+    {
+        return FormContextAction::READ === $this->action;
+    }
+
+    public function isUpdate(): bool
     {
         return FormContextAction::UPDATE === $this->action;
     }
 
-    public function isCreateContext(): bool
+    public function isDelete(): bool
     {
-        return FormContextAction::CREATE === $this->action;
+        return FormContextAction::DELETE === $this->action;
+    }
+
+    public function isInvalid(): bool
+    {
+        return FormContextAction::INVALID === $this->action;
     }
 }
