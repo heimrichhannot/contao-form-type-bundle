@@ -58,11 +58,11 @@ abstract class AbstractFormType implements FormTypeInterface
         {
             /** @var class-string<Model> $modelClass */
             $modelClass = Model::getClassFromTable(static::DEFAULT_FORM_CONTEXT_TABLE);
-            $obj = $modelClass::findByPk($modelPk);
-            if ($obj === null) {
+            $modelInstance = $modelClass::findByPk($modelPk);
+            if ($modelInstance === null) {
                 return FormContext::invalid(static::DEFAULT_FORM_CONTEXT_TABLE, 'Could not find object.');
             }
-            return FormContext::update(static::DEFAULT_FORM_CONTEXT_TABLE, $obj->row());
+            return FormContext::update(static::DEFAULT_FORM_CONTEXT_TABLE, $modelInstance->row());
         }
 
         return FormContext::create(static::DEFAULT_FORM_CONTEXT_TABLE);
@@ -132,10 +132,6 @@ abstract class AbstractFormType implements FormTypeInterface
 
             $oldValue = $oldData[$key] ?? null;
 
-            if (is_array($newValue)) {
-                $newValue = serialize($newValue);
-            }
-
             if ($newValue !== $oldValue
                 && !(empty($newValue) && empty($oldValue)))
             {
@@ -145,6 +141,10 @@ abstract class AbstractFormType implements FormTypeInterface
 
         if (sizeof($setData) < 1) {
             return;
+        }
+
+        if (in_array('tstamp', $validKeys)) {
+            $setData['tstamp'] = time();
         }
 
         $sql = "UPDATE %s SET %s WHERE id = ?";

@@ -3,9 +3,14 @@
 namespace HeimrichHannot\FormTypeBundle\EventListener;
 
 use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\Date;
 use Contao\Form;
+use Contao\FormFieldModel;
 use Contao\FormModel;
+use Contao\Input;
+use Contao\StringUtil;
 use Contao\Widget;
+use DateTime;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
 use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
@@ -50,6 +55,31 @@ class FormGeneratorListener
                 }
             }
 
+            $formContext = $formType->getFormContext();
+            $data = $formContext->getData();
+
+            if (!empty($widget->name)) {
+                $value = $data[str_replace('[]', '', $widget->name)] ?? null;
+                $value = StringUtil::deserialize($value) ?? $value ?? $widget->value;
+                $widget->value = $value;
+            }
+
+            if (Input::post('FORM_SUBMIT') !== $formId && in_array($widget->rgxp, ['date', 'time', 'datim']))
+            {
+                try {
+                    $date = Date::parse('Y-m-d H:i:s', $widget->value);
+                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $date);
+                    $widget->value = $dt ? match ($widget->rgxp) {
+                        'date' => $dt->format(Date::getNumericDateFormat()),
+                        'time' => $dt->format(Date::getNumericTimeFormat()),
+                        'datim' => $dt->format(Date::getNumericDatimFormat()),
+                        default => $widget->value
+                    } : null;
+                } catch (\Exception) {
+                    $widget->value = null;
+                }
+            }
+
             $event = new LoadFormFieldEvent($widget, $formId, $formData, $form);
             $formType->onLoadFormField($event);
             $widget = $event->getWidget();
@@ -70,6 +100,25 @@ class FormGeneratorListener
             } else {
                 $this->files[$form->formID] = $_SESSION['FILES'] ?? [];
             }
+
+            foreach (FormFieldModel::findByPid($form->id) as $formField)
+            {
+                $data = $submittedData[$formField->name] ?? null;
+
+                if ($data === null) {
+                    continue;
+                }
+
+                if (in_array($formField->rgxp, ['date', 'time', 'datim'])) {
+                    $objDate = new Date($data, Date::getFormatFromRgxp($formField->rgxp));
+                    $submittedData[$formField->name] = $objDate->tstamp;
+                }
+
+                if (is_array($data)) {
+                    $submittedData[$formField->name] = serialize($data);
+                }
+            }
+
             $event = new PrepareFormDataEvent($submittedData, $labels, $fields, $form);
             $formType->onPrepareFormData($event);
             $submittedData = $event->getData();
