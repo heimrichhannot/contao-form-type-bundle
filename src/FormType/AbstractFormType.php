@@ -4,6 +4,8 @@ namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\DataContainer;
 use Contao\FormModel;
+use Contao\Model;
+use Contao\System;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
 use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
 use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
@@ -12,9 +14,12 @@ use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ValidateFormFieldEvent;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 abstract class AbstractFormType implements FormTypeInterface
 {
+    protected const DEFAULT_FORM_CONTEXT_TABLE = null;
+
     public function getType(): string
     {
         $className = ltrim(strrchr(static::class, '\\'), '\\');
@@ -35,17 +40,49 @@ abstract class AbstractFormType implements FormTypeInterface
 
     final public function getFormContext(): FormContext
     {
+        # todo: cache evaluations to improve performance
         return $this->evaluateFormContext();
     }
 
-    protected function evaluateFormContext(): FormContext {
-        return FormContext::create();
+    protected function evaluateFormContext(): FormContext
+    {
+        if (!static::DEFAULT_FORM_CONTEXT_TABLE) {
+            return FormContext::create();
+        }
+
+        $requestStack = System::getContainer()->get('request_stack');
+        $request = $requestStack->getCurrentRequest();
+        $editParameter = 'edit';
+
+        if ($modelPk = $request->query->get($editParameter))
+        {
+            /** @var class-string<Model> $modelClass */
+            $modelClass = Model::getClassFromTable(static::DEFAULT_FORM_CONTEXT_TABLE);
+            $obj = $modelClass::findByPk($modelPk);
+            if ($obj === null) {
+                return FormContext::invalid(static::DEFAULT_FORM_CONTEXT_TABLE, 'Could not find object.');
+            }
+            return FormContext::update(static::DEFAULT_FORM_CONTEXT_TABLE, $obj->row());
+        }
+
+        return FormContext::create(static::DEFAULT_FORM_CONTEXT_TABLE);
     }
 
     abstract public function onload(DataContainer $dataContainer, FormModel $formModel): void;
 
     public function onPrepareFormData(PrepareFormDataEvent $event): void
     {
+        $formContext = $this->getFormContext();
+
+        if ($formContext->isInvalid()) {
+            $errorClass = $formContext->getData()['_errorClass'] ?? BadRequestHttpException::class;
+            throw new $errorClass($formContext->getData()['_detail'] ?? 'Invalid form context.');
+        }
+
+        if ($formContext->isRead() || $formContext->isUpdate() || $formContext->isDelete())
+        {
+            $event->getForm()->storeValues = '';
+        }
     }
 
     public function onStoreFormData(StoreFormDataEvent $event): void
@@ -54,6 +91,10 @@ abstract class AbstractFormType implements FormTypeInterface
 
     public function onProcessFormData(ProcessFormDataEvent $event): void
     {
+        if ($this->getFormContext()->isUpdate())
+        {
+            $this->onUpdate($event);
+        }
     }
 
     public function onValidateFormField(ValidateFormFieldEvent $event): void
@@ -70,5 +111,53 @@ abstract class AbstractFormType implements FormTypeInterface
 
     public function onGetForm(GetFormEvent $event): void
     {
+    }
+
+    protected function onUpdate(ProcessFormDataEvent $event): void
+    {
+        $formContext = $this->getFormContext();
+        $oldData = $formContext->getData();
+        $newData = $event->getSubmittedData();
+        $validKeys = array_keys($oldData);
+
+        $setData = [];
+
+        foreach ($newData as $key => $newValue)
+        {
+            if (in_array($key, ['dateAdded', 'alias'])
+                || !in_array($key, $validKeys))
+            {
+                continue;
+            }
+
+            $oldValue = $oldData[$key] ?? null;
+
+            if (is_array($newValue)) {
+                $newValue = serialize($newValue);
+            }
+
+            if ($newValue !== $oldValue
+                && !(empty($newValue) && empty($oldValue)))
+            {
+                $setData[$key] = $newValue ?? null;
+            }
+        }
+
+        if (sizeof($setData) < 1) {
+            return;
+        }
+
+        $sql = "UPDATE %s SET %s WHERE id = ?";
+
+        $sql = sprintf(
+            $sql,
+            $formContext->getTable(),
+            implode(', ', array_map(fn ($key) => $key . ' = ?', array_keys($setData)))
+        );
+
+        $database = System::getContainer()->get('database_connection');
+
+        $stmt = $database->prepare($sql);
+        $stmt->executeStatement([...array_values($setData), $formContext->getData()['id']]);
     }
 }
