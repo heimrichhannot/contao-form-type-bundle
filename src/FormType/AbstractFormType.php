@@ -2,6 +2,7 @@
 
 namespace HeimrichHannot\FormTypeBundle\FormType;
 
+use Contao\CoreBundle\Controller\AbstractController;
 use Contao\DataContainer;
 use Contao\FormModel;
 use Contao\Model;
@@ -13,12 +14,34 @@ use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ValidateFormFieldEvent;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-abstract class AbstractFormType implements FormTypeInterface
+abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberInterface
 {
     protected const DEFAULT_FORM_CONTEXT_TABLE = null;
+
+    protected ?ContainerInterface $container = null;
+
+    /**
+     * @required
+     */
+    public function setContainer(ContainerInterface $container): ?ContainerInterface
+    {
+        $previous = $this->container;
+        $this->container = $container;
+
+        return $previous;
+    }
+
+    public static function getSubscribedServices()
+    {
+        return [
+            'database_connection' => '?database_connection',
+        ];
+    }
 
     public function getType(): string
     {
@@ -155,9 +178,7 @@ abstract class AbstractFormType implements FormTypeInterface
             implode(', ', array_map(fn ($key) => $key . ' = ?', array_keys($setData)))
         );
 
-        $database = System::getContainer()->get('database_connection');
-
-        $stmt = $database->prepare($sql);
+        $stmt = $this->container->get('database_connection')->prepare($sql);
         $stmt->executeStatement([...array_values($setData), $formContext->getData()['id']]);
     }
 }
