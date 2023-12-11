@@ -105,3 +105,106 @@ class MyContainerOrFormType
     }
 }
 ```
+
+### Form Context
+
+Implementing a form context evaluator on your from type allows you to change the form's behavior depending on the context it is used in.
+This can be used e.g. to load existing data into the form fields, perhaps to create an editing form.
+
+#### Built-in Form Edit Context
+
+A basic default form context evaluator providing editing functionality is built into the bundle.
+Just override `DEFAULT_FORM_CONTEXT_TABLE` in your form type to allow editing the respective database model:
+```php
+protected const DEFAULT_FORM_CONTEXT_TABLE = 'tl_my_table';
+```
+
+* Create your form in Contao.
+* Name your form fields like the database fields you want to edit, e.g. `title` for `tl_my_table.title`.
+* Append the query parameter `?edit=<id>` to the url of the page your form is included in to edit the existing row with a primary key of `<id>`.
+
+If no `DEFAULT_FORM_CONTEXT_TABLE` is set, the form will be treated as a creation form by default.
+
+#### Create your own Form Context
+
+To implement your own form context evaluator, override `evaluateFormContext()` in your form type:
+```php
+protected function evaluateFormContext(): FormContext
+{
+    $request = $this->container->get('request_stack')->getCurrentRequest();
+    $editParameter = 'edit';
+    $databaseTable = 'tl_my_table';
+
+    if ($modelPk = $request->query->get($editParameter))
+    {
+        /** @var class-string<Model> $modelClass */
+        $modelClass = Model::getClassFromTable($databaseTable);
+        $modelInstance = $modelClass::findByPk($modelPk);
+        if ($modelInstance === null) {
+            return FormContext::invalid($databaseTable, 'Could not find object.');
+        }
+        return FormContext::update($databaseTable, $modelInstance->row());
+    }
+
+    return FormContext::create($databaseTable);
+}
+```
+
+The example shows the implementation of a form context evaluator that allows editing a database model with a primary key given by the query parameter `edit`.
+
+#### Form Context Actions
+
+Most commonly used form context actions are already implemented.
+
+```php
+use HeimrichHannot\FormTypeBundle\FormType\FormContextAction;
+
+FormContextAction::CREATE;
+FormContextAction::READ;
+FormContextAction::UPDATE;
+FormContextAction::DELETE;
+FormContextAction::CLONE;
+FormContextAction::INVALID;
+```
+
+`FormContextAction::INVALID` can be used to indicate that the form should not be processed.
+
+To instantiate a `FormContext` object with a built-in action, use the static factory methods:
+
+```php
+use HeimrichHannot\FormTypeBundle\FormType\FormContext;
+
+$createContext  = FormContext::create('tl_my_table');
+$readContext    = FormContext::read('tl_my_table', $data);
+$updateContext  = FormContext::update('tl_my_table', $data);
+$deleteContext  = FormContext::delete('tl_my_table', $data);
+
+$cloneContext   = FormContext::clone('tl_my_table', $data);
+
+$invalidContext = FormContext::invalid('tl_my_table', 'This is error detail.', $additionalData ?? []);
+```
+
+Alternatively, you may also use the `FormContext` constructor:
+
+```php
+use HeimrichHannot\FormTypeBundle\FormType\FormContext;
+use HeimrichHannot\FormTypeBundle\FormType\FormContextAction;
+
+$formContext = new FormContext(FormContextAction::UPDATE, 'tl_my_table', $data);
+```
+
+
+However, you may also specify your own actions when constructing a `FormContext` object, or by overriding the action of an existing object.
+
+```php
+use HeimrichHannot\FormTypeBundle\FormType\FormContext;
+use HeimrichHannot\FormTypeBundle\FormType\FormContextAction;
+
+$formContext = new FormContext('my_custom_action', 'tl_my_table', $data);
+// or
+$formContext->setAction('this_can_be_any_string_or_action');
+// or
+$formContext->setAction(FormContextAction::DELETE);
+```
+
+This way you are not bound to the built-in actions.
