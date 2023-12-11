@@ -100,7 +100,7 @@ class MyContainerOrFormType
     {
         return $this->dispatchFieldOptions([
             'free' => 'Released for use under indication of copyright',
-            'locked' => 'Subject to license'
+            'locked' => 'Subject to licence'
         ]);
     }
 }
