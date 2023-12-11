@@ -26,6 +26,11 @@ class FormContext
         return new static(FormContextAction::DELETE, $table, $data);
     }
 
+    public static function clone(string $table, array $data = null): self
+    {
+        return new static(FormContextAction::CLONE, $table, $data);
+    }
+
     public static function invalid(?string $table = null, mixed $detail = null, ?array $moreData = []): self
     {
         return new static(FormContextAction::INVALID, $table, ['_detail' => $detail, ...$moreData]);
