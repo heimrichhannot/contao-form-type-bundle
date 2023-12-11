@@ -2,11 +2,9 @@
 
 namespace HeimrichHannot\FormTypeBundle\FormType;
 
-use Contao\CoreBundle\Controller\AbstractController;
 use Contao\DataContainer;
 use Contao\FormModel;
 use Contao\Model;
-use Contao\System;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
 use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
 use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
@@ -40,6 +38,7 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
     {
         return [
             'database_connection' => '?database_connection',
+            'request_stack' => '?request_stack',
         ];
     }
 
@@ -73,8 +72,7 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
             return FormContext::create();
         }
 
-        $requestStack = System::getContainer()->get('request_stack');
-        $request = $requestStack->getCurrentRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $editParameter = 'edit';
 
         if ($modelPk = $request->query->get($editParameter))
