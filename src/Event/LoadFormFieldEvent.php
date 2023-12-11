@@ -5,12 +5,11 @@ namespace HeimrichHannot\FormTypeBundle\Event;
 use Contao\Form;
 use Contao\Widget;
 
-class LoadFormFieldEvent
+class LoadFormFieldEvent extends AbstractFormEvent
 {
     private Widget $widget;
     private string $formId;
     private array $formData;
-    private Form $form;
 
     public function __construct(Widget $widget, string $formId, array $formData, Form $form)
     {
@@ -43,10 +42,5 @@ class LoadFormFieldEvent
     public function setFormData(array $formData): void
     {
         $this->formData = $formData;
-    }
-
-    public function getForm(): Form
-    {
-        return $this->form;
     }
 }

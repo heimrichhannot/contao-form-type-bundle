@@ -5,7 +5,6 @@ namespace HeimrichHannot\FormTypeBundle\FormType;
 use Contao\DataContainer;
 use Contao\FormModel;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
-use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
 use HeimrichHannot\FormTypeBundle\Event\LoadFormFieldEvent;
 use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
@@ -24,11 +23,6 @@ interface FormTypeInterface
     public function getType(): string;
 
     /**
-     * Adjust the backend dca for the current form type.
-     */
-    public function onload(DataContainer $dataContainer, FormModel $formModel): void;
-
-    /**
      * Return the default fields for the current form type. Will be used for the first time wizard
      *
      * Example:
@@ -44,6 +38,11 @@ interface FormTypeInterface
      */
     public function getDefaultFields(FormModel $formModel): array;
 
+    /**
+     * Adjust the backend dca for the current form type.
+     */
+    public function onload(DataContainer $dataContainer, FormModel $formModel): void;
+
     public function onPrepareFormData(PrepareFormDataEvent $event): void;
 
     public function onStoreFormData(StoreFormDataEvent $event): void;
@@ -56,5 +55,4 @@ interface FormTypeInterface
 
     public function onLoadFormField(LoadFormFieldEvent $event): void;
 
-    public function onGetForm(GetFormEvent $event): void;
 }

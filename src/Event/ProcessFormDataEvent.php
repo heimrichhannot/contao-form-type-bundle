@@ -4,13 +4,12 @@ namespace HeimrichHannot\FormTypeBundle\Event;
 
 use Contao\Form;
 
-class ProcessFormDataEvent
+class ProcessFormDataEvent extends AbstractFormEvent
 {
     private array $submittedData;
     private array $formData;
     private ?array $files;
     private array $labels;
-    private Form $form;
 
     public function __construct(array $submittedData, array $formData, ?array $files, array $labels, Form $form)
     {
@@ -39,10 +38,5 @@ class ProcessFormDataEvent
     public function getLabels(): array
     {
         return $this->labels;
-    }
-
-    public function getForm(): Form
-    {
-        return $this->form;
     }
 }

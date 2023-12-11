@@ -5,11 +5,10 @@ namespace HeimrichHannot\FormTypeBundle\Event;
 use Contao\Form;
 use Contao\FormModel;
 
-class GetFormEvent
+class GetFormEvent extends AbstractFormEvent
 {
     private FormModel $formModel;
     private string $buffer;
-    private Form $form;
 
     public function __construct(FormModel $formModel, string &$buffer, Form $form)
     {
@@ -31,10 +30,5 @@ class GetFormEvent
     public function setBuffer(string $buffer): void
     {
         $this->buffer = $buffer;
-    }
-
-    public function getForm(): Form
-    {
-        return $this->form;
     }
 }
