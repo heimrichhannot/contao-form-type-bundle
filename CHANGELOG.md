@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.6] - 2023-12-11
+## [0.1.7] - 2023-12-11
 - Feature: Forms can now be edited
 - Feature: Custom form context support
 
