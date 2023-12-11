@@ -152,6 +152,13 @@ protected function evaluateFormContext(): FormContext
 
 The example shows the implementation of a form context evaluator that allows editing a database model with a primary key given by the query parameter `edit`.
 
+To retrieve the current form context, call the getter on your form type:
+```php
+$formContext = $this->getFormContext();
+```
+
+We do not recommend to call `$this->evaluateFormContext()` directly, as it will skip future cache implementations if you do.
+
 #### Form Context Actions
 
 Most commonly used form context actions are already implemented.
