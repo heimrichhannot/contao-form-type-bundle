@@ -58,13 +58,15 @@ class FormGeneratorListener
             $formContext = $formType->getFormContext();
             $data = $formContext->getData();
 
-            if (!empty($widget->name)) {
+            if (!empty($widget->name) && !$formContext->isCreate()) {
                 $value = $data[str_replace('[]', '', $widget->name)] ?? null;
                 $value = StringUtil::deserialize($value) ?? $value ?? $widget->value;
                 $widget->value = $value;
             }
 
-            if (Input::post('FORM_SUBMIT') !== $formId && in_array($widget->rgxp, ['date', 'time', 'datim']))
+            if (Input::post('FORM_SUBMIT') !== $formId
+                && !$formContext->isCreate()
+                && in_array($widget->rgxp, ['date', 'time', 'datim']))
             {
                 try {
                     $date = Date::parse('Y-m-d H:i:s', $widget->value);
