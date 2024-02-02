@@ -84,6 +84,7 @@ class FormGeneratorListener
 
             $event = new LoadFormFieldEvent($widget, $formId, $formData, $form);
             $formType->onLoadFormField($event);
+            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.load_form_field');
             $widget = $event->getWidget();
         }
 
@@ -123,6 +124,7 @@ class FormGeneratorListener
 
             $event = new PrepareFormDataEvent($submittedData, $labels, $fields, $form);
             $formType->onPrepareFormData($event);
+            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.prepare_form_data');
             $submittedData = $event->getData();
         }
     }
@@ -136,6 +138,7 @@ class FormGeneratorListener
         {
             $event = new StoreFormDataEvent($data, $form, $this->files[$form->formID] ?? []);
             $formType->onStoreFormData($event);
+            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.store_form_data');
             $data = $event->getData();
         }
         return $data;
@@ -149,6 +152,7 @@ class FormGeneratorListener
         if ($formType = $this->formTypeCollection->getType($form))
         {
             $event = new ProcessFormDataEvent($submittedData, $formData, $files, $labels, $form);
+            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.process_form_data');
             $formType->onProcessFormData($event);
         }
     }
@@ -162,6 +166,7 @@ class FormGeneratorListener
         {
             $event = new ValidateFormFieldEvent($widget, $formId, $formData, $form);
             $formType->onValidateFormField($event);
+            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.validate_form_field');
             $widget = $event->getWidget();
         }
         return $widget;
@@ -176,6 +181,7 @@ class FormGeneratorListener
         {
             $event = new CompileFormFieldsEvent($fields, $formId, $form);
             $formType->onCompileFormFields($event);
+            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.compile_form_fields');
             $fields = $event->getFields();
         }
         return $fields;

@@ -54,6 +54,23 @@ public function getDefaultFields(FormModel $formModel): array
 }
 ```
 
+### Form events
+
+You can register event listeners for events during form livecycle.
+These events are mappings of the corresponding contao form hooks but will only fire for the specific form type.
+
+Following events are available:
+
+| Event                  | Name                                     |
+|------------------------|------------------------------------------|
+| CompileFormFieldsEvent | huh.form_type.[TYPE].compile_form_fields |
+| LoadFormFieldEvent     | huh.form_type.[TYPE].load_form_field     |
+| PrepareFormDataEvent   | huh.form_type.[TYPE].prepare_form_data   |
+| ProcessFormDataEvent   | huh.form_type.[TYPE].process_form_data   |
+| StoreFormDataEvent     | huh.form_type.[TYPE].store_form_data     |
+| ValidateFormFieldEvent | huh.form_type.[TYPE].validate_form_field |
+
+
 ### Options event
 
 If you want to provide options for a select, checkbox or radio form field, you can register an event listener. 
