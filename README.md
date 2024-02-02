@@ -20,7 +20,7 @@ composer require heimrichhannot/contao-form-type-bundle
 
 ### Create a new form type
 
-Create a new class that extends `[AbstractFormType.php](src%2FFormType%2FAbstractFormType.php)` (recommended) or implements the `FormTypeInterface`. Register it as service with autoconfiguration enabled.
+Create a new class that extends `AbstractFormType`. Register it as service with autoconfiguration enabled.
 
 A label can be set within `$GLOBALS['TL_LANG']['tl_form']['FORMTYPE']`:
 
