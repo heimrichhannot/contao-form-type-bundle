@@ -25,12 +25,16 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class FormGeneratorListener
 {
     private array $files = [];
+    private FormTypeCollection $formTypeCollection;
+    private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
-        private readonly FormTypeCollection       $formTypeCollection,
-        private readonly EventDispatcherInterface $eventDispatcher
+        FormTypeCollection       $formTypeCollection,
+        EventDispatcherInterface $eventDispatcher
     )
     {
+        $this->eventDispatcher = $eventDispatcher;
+        $this->formTypeCollection = $formTypeCollection;
     }
 
     /**
