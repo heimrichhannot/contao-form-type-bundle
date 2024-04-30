@@ -75,8 +75,7 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
         $request = $this->container->get('request_stack')->getCurrentRequest();
         $editParameter = 'edit';
 
-        if ($modelPk = $request->query->get($editParameter))
-        {
+        if ($modelPk = $request->query->get($editParameter)) {
             /** @var class-string<Model> $modelClass */
             $modelClass = Model::getClassFromTable(static::DEFAULT_FORM_CONTEXT_TABLE);
             $modelInstance = $modelClass::findByPk($modelPk);
@@ -100,8 +99,7 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
             throw new $errorClass($formContext->getData()['_detail'] ?? 'Invalid form context.');
         }
 
-        if ($formContext->isRead() || $formContext->isUpdate() || $formContext->isDelete())
-        {
+        if ($formContext->isRead() || $formContext->isUpdate() || $formContext->isDelete()) {
             $event->getForm()->storeValues = '';
         }
     }
@@ -112,8 +110,7 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
 
     public function onProcessFormData(ProcessFormDataEvent $event): void
     {
-        if ($this->getFormContext()->isUpdate())
-        {
+        if ($this->getFormContext()->isUpdate()) {
             $this->onUpdate($event);
         }
     }
@@ -143,19 +140,16 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
 
         $setData = [];
 
-        foreach ($newData as $key => $newValue)
-        {
+        foreach ($newData as $key => $newValue) {
             if (in_array($key, ['dateAdded', 'alias'])
-                || !in_array($key, $validKeys))
-            {
+                || !in_array($key, $validKeys)) {
                 continue;
             }
 
             $oldValue = $oldData[$key] ?? null;
 
             if ($newValue !== $oldValue
-                && !(empty($newValue) && empty($oldValue)))
-            {
+                && !(empty($newValue) && empty($oldValue))) {
                 $setData[$key] = $newValue ?? null;
             }
         }

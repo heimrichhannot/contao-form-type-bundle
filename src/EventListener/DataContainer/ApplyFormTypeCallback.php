@@ -17,10 +17,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ApplyFormTypeCallback
 {
     private readonly TranslatorInterface $translator;
+
     private readonly UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(private readonly FormTypeCollection $formTypeCollection, TranslatorInterface $translator, UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private readonly FormTypeCollection $formTypeCollection,
+        TranslatorInterface $translator,
+        UrlGeneratorInterface $urlGenerator
+    ) {
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
     }
@@ -53,5 +57,4 @@ class ApplyFormTypeCallback
             Message::addInfo($this->translator->trans('tl_form.MESSAGE.ft_field_wizard', [$url], 'contao_tl_form'));
         }
     }
-
 }

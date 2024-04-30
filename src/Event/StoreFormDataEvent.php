@@ -6,8 +6,11 @@ use Contao\Form;
 
 class StoreFormDataEvent extends AbstractFormEvent
 {
-    public function __construct(private array $data, Form $form, private readonly array $files)
-    {
+    public function __construct(
+        private array $data,
+        Form $form,
+        private readonly array $files
+    ) {
         $this->form = $form;
     }
 

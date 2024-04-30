@@ -15,7 +15,8 @@ class LoadFormFieldEvent extends Event
         private array $formData,
         private readonly Form $form,
         private readonly FormContext $formContext
-    ) {}
+    ) {
+    }
 
     public function getWidget(): Widget
     {

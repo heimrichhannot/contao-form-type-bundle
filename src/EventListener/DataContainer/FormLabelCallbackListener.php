@@ -14,18 +14,19 @@ class FormLabelCallbackListener
 {
     private readonly TranslatorInterface $translator;
 
-    public function __construct(TranslatorInterface $translator, private readonly FormTypeCollection $formTypeCollection)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        private readonly FormTypeCollection $formTypeCollection
+    ) {
         $this->translator = $translator;
     }
 
     public function __invoke(array $row, string $label, DataContainer $dc, array $labels): string
     {
         if ($row['formType'] && $formType = $this->formTypeCollection->getType($row['formType'])) {
-            $label .= ' <span style="color:#999;padding-left:3px;">['.$this->translator->trans('tl_form.FORMTYPE.'.$formType->getType(), [], 'contao_tl_form').']</span>';
+            $label .= ' <span style="color:#999;padding-left:3px;">[' . $this->translator->trans('tl_form.FORMTYPE.' . $formType->getType(), [], 'contao_tl_form') . ']</span>';
         }
 
         return $label;
     }
-
 }
