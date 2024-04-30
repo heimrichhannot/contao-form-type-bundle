@@ -6,13 +6,8 @@ use Contao\Form;
 
 class CompileFormFieldsEvent extends AbstractFormEvent
 {
-    private array $fields;
-    private string $formId;
-
-    public function __construct(array $fields, string $formId, Form $form)
+    public function __construct(private array $fields, private readonly string $formId, Form $form)
     {
-        $this->fields = $fields;
-        $this->formId = $formId;
         $this->form = $form;
     }
 

@@ -11,9 +11,9 @@ class LoadFormFieldEvent extends Event
 {
     public function __construct(
         private Widget $widget,
-        private string $formId,
+        private readonly string $formId,
         private array $formData,
-        private Form $form,
+        private readonly Form $form,
         private readonly FormContext $formContext
     ) {}
 

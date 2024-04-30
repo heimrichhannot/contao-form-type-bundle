@@ -46,9 +46,9 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
     {
         $className = ltrim(strrchr(static::class, '\\'), '\\');
 
-        if ('FormType' === substr($className, -8)) {
+        if (str_ends_with($className, 'FormType')) {
             $className = substr($className, 0, -8);
-        } elseif ('Type' === substr($className, -4)) {
+        } elseif (str_ends_with($className, 'Type')) {
             $className = substr($className, 0, -4);
         }
 

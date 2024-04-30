@@ -20,7 +20,7 @@ class HeimrichHannotFormTypeBundle extends Bundle
         return new HeimrichHannotFormTypeExtension();
     }
 
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 

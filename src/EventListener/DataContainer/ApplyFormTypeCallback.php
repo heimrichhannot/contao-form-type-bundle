@@ -16,13 +16,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ApplyFormTypeCallback
 {
-    private FormTypeCollection $formTypeCollection;
-    private TranslatorInterface $translator;
-    private UrlGeneratorInterface $urlGenerator;
+    private readonly TranslatorInterface $translator;
+    private readonly UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(FormTypeCollection $formTypeCollection, TranslatorInterface $translator, UrlGeneratorInterface $urlGenerator)
+    public function __construct(private readonly FormTypeCollection $formTypeCollection, TranslatorInterface $translator, UrlGeneratorInterface $urlGenerator)
     {
-        $this->formTypeCollection = $formTypeCollection;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
     }

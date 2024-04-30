@@ -25,16 +25,14 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class FormGeneratorListener
 {
     private array $files = [];
-    private FormTypeCollection $formTypeCollection;
-    private EventDispatcherInterface $eventDispatcher;
+    private readonly EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
-        FormTypeCollection       $formTypeCollection,
+        private readonly FormTypeCollection       $formTypeCollection,
         EventDispatcherInterface $eventDispatcher
     )
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->formTypeCollection = $formTypeCollection;
     }
 
     /**
@@ -48,7 +46,7 @@ class FormGeneratorListener
                 /** @var FieldOptionsEvent $event */
                 $event = $this->eventDispatcher->dispatch(
                     new FieldOptionsEvent($widget, $form, $widget->options),
-                    'huh.form_type.'.$formType->getType().'.'.str_replace('[]', '', $widget->name).'.options'
+                    'huh.form_type.'.$formType->getType().'.'.str_replace('[]', '', (string) $widget->name).'.options'
                 );
                 if ($event->isDirty()) {
                     $options = $event->getOptions();
@@ -63,7 +61,7 @@ class FormGeneratorListener
             $data = $formContext->getData();
 
             if (!empty($widget->name) && !$formContext->isCreate()) {
-                $value = $data[str_replace('[]', '', $widget->name)] ?? null;
+                $value = $data[str_replace('[]', '', (string) $widget->name)] ?? null;
                 $value = StringUtil::deserialize($value) ?? $value ?? $widget->value;
                 $widget->value = $value;
             }

@@ -12,13 +12,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class FormLabelCallbackListener
 {
-    private TranslatorInterface $translator;
-    private FormTypeCollection $formTypeCollection;
+    private readonly TranslatorInterface $translator;
 
-    public function __construct(TranslatorInterface $translator, FormTypeCollection $formTypeCollection)
+    public function __construct(TranslatorInterface $translator, private readonly FormTypeCollection $formTypeCollection)
     {
         $this->translator = $translator;
-        $this->formTypeCollection = $formTypeCollection;
     }
 
     public function __invoke(array $row, string $label, DataContainer $dc, array $labels): string

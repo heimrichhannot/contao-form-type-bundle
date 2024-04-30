@@ -6,17 +6,8 @@ use Contao\Form;
 
 class ProcessFormDataEvent extends AbstractFormEvent
 {
-    private array $submittedData;
-    private array $formData;
-    private ?array $files;
-    private array $labels;
-
-    public function __construct(array $submittedData, array $formData, ?array $files, array $labels, Form $form)
+    public function __construct(private readonly array $submittedData, private readonly array $formData, private readonly ?array $files, private readonly array $labels, Form $form)
     {
-        $this->submittedData = $submittedData;
-        $this->formData = $formData;
-        $this->files = $files;
-        $this->labels = $labels;
         $this->form = $form;
     }
 
