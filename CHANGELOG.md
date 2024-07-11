@@ -2,11 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.10] - 2024-07-11
+- Fixed: compile error on missing type
+
 ## [0.1.9] - 2024-04-30
 - Changed: require at least php 8.1
 - Changed: LoadFormFieldEvent now containers the form context
 - Deprecated: LoadFormFieldEvent::setWidget()
-- 
 
 ## [0.1.8] - 2024-02-02
 - Added: form events

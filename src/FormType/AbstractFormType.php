@@ -34,7 +34,7 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
         return $previous;
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             'database_connection' => '?database_connection',
