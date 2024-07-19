@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.11] - 2024-07-19
+- Fixed: deprecated VERSION constant
+
 ## [0.1.10] - 2024-07-11
 - Fixed: compile error on missing type
 

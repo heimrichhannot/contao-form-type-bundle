@@ -2,6 +2,7 @@
 
 namespace HeimrichHannot\FormTypeBundle\EventListener;
 
+use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Date;
 use Contao\Form;
@@ -30,8 +31,9 @@ class FormGeneratorListener
 
     public function __construct(
         private readonly FormTypeCollection $formTypeCollection,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+        EventDispatcherInterface            $eventDispatcher
+    )
+    {
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -45,7 +47,7 @@ class FormGeneratorListener
                 /** @var FieldOptionsEvent $event */
                 $event = $this->eventDispatcher->dispatch(
                     new FieldOptionsEvent($widget, $form, $widget->options),
-                    'huh.form_type.' . $formType->getType() . '.' . str_replace('[]', '', (string) $widget->name) . '.options'
+                    'huh.form_type.' . $formType->getType() . '.' . str_replace('[]', '', (string)$widget->name) . '.options'
                 );
                 if ($event->isDirty()) {
                     $options = $event->getOptions();
@@ -60,7 +62,7 @@ class FormGeneratorListener
             $data = $formContext->getData();
 
             if (!empty($widget->name) && !$formContext->isCreate()) {
-                $value = $data[str_replace('[]', '', (string) $widget->name)] ?? null;
+                $value = $data[str_replace('[]', '', (string)$widget->name)] ?? null;
                 $value = StringUtil::deserialize($value) ?? $value ?? $widget->value;
                 $widget->value = $value;
             }
@@ -97,9 +99,11 @@ class FormGeneratorListener
     public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form, array $files = []): void
     {
         if ($formType = $this->formTypeCollection->getType($form)) {
-            if (version_compare('5.0', VERSION . '.' . BUILD)) {
+            if (version_compare(ContaoCoreBundle::getVersion(), '5.0', '>=')) {
+                // Code for Contao 5.0 or later
                 $this->files[$form->formID] = $files;
             } else {
+                // Code for Contao versions earlier than 5.0
                 $this->files[$form->formID] = $_SESSION['FILES'] ?? [];
             }
 
