@@ -73,7 +73,7 @@ class FormGeneratorListener
             }
         }
 
-        $fieldOptionsEvent = new LoadFormFieldEvent($widget, $formId, $formData, $formContext, $form);
+        $fieldOptionsEvent = new LoadFormFieldEvent($widget, $formId, $formData, $form, $formContext);
         $formType->onLoadFormField($fieldOptionsEvent);
         $this->eventDispatcher->dispatch($fieldOptionsEvent, "huh.form_type.{$formType->getType()}.load_form_field");
 
