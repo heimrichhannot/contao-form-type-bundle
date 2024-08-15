@@ -2,8 +2,6 @@
 
 namespace HeimrichHannot\FormTypeBundle\FormType;
 
-use Contao\Model;
-
 class FormContext
 {
     public static function create(?string $table = null): self
@@ -33,15 +31,17 @@ class FormContext
 
     public static function invalid(?string $table = null, mixed $detail = null, ?array $moreData = []): self
     {
-        return new static(FormContextAction::INVALID, $table, ['_detail' => $detail, ...$moreData]);
+        return new static(FormContextAction::INVALID, $table, [
+            '_detail' => $detail,
+            ...$moreData,
+        ]);
     }
 
     public function __construct(
         private FormContextAction|string $action,
-        private ?string                  $table,
-        private ?array                   $data = null,
-    )
-    {
+        private ?string $table,
+        private ?array $data = null,
+    ) {
         $this->setAction($action);
     }
 

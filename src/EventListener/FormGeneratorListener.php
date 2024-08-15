@@ -2,7 +2,7 @@
 
 namespace HeimrichHannot\FormTypeBundle\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\Date;
 use Contao\Form;
 use Contao\FormFieldModel;
@@ -75,7 +75,7 @@ class FormGeneratorListener
 
         $fieldOptionsEvent = new LoadFormFieldEvent($widget, $formId, $formData, $formContext, $form);
         $formType->onLoadFormField($fieldOptionsEvent);
-        $this->eventDispatcher->dispatch($fieldOptionsEvent, 'huh.form_type.'.$formType->getType().'.load_form_field');
+        $this->eventDispatcher->dispatch($fieldOptionsEvent, "huh.form_type.{$formType->getType()}.load_form_field");
 
         return $fieldOptionsEvent->getWidget();
     }
@@ -122,9 +122,11 @@ class FormGeneratorListener
     {
         if ($formType = $this->formTypeCollection->getType($form))
         {
-            if (version_compare('5.0', VERSION.'.'.BUILD)) {
+            if (\version_compare(ContaoCoreBundle::getVersion(), '5.0', '>=')) {
+                // Code for Contao 5.0 or later
                 $this->files[$form->formID] = $files;
             } else {
+                // Code for Contao versions earlier than 5.0
                 $this->files[$form->formID] = $_SESSION['FILES'] ?? [];
             }
 
@@ -148,7 +150,7 @@ class FormGeneratorListener
 
             $event = new PrepareFormDataEvent($submittedData, $labels, $fields, $form);
             $formType->onPrepareFormData($event);
-            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.prepare_form_data');
+            $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.prepare_form_data");
             $submittedData = $event->getData();
         }
     }
@@ -162,7 +164,7 @@ class FormGeneratorListener
         {
             $event = new StoreFormDataEvent($data, $form, $this->files[$form->formID] ?? []);
             $formType->onStoreFormData($event);
-            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.store_form_data');
+            $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.store_form_data");
             $data = $event->getData();
         }
         return $data;
@@ -176,7 +178,7 @@ class FormGeneratorListener
         if ($formType = $this->formTypeCollection->getType($form))
         {
             $event = new ProcessFormDataEvent($submittedData, $formData, $files, $labels, $form);
-            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.process_form_data');
+            $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.process_form_data");
             $formType->onProcessFormData($event);
         }
     }
@@ -190,7 +192,7 @@ class FormGeneratorListener
         {
             $event = new ValidateFormFieldEvent($widget, $formId, $formData, $form);
             $formType->onValidateFormField($event);
-            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.validate_form_field');
+            $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.validate_form_field");
             $widget = $event->getWidget();
         }
         return $widget;
@@ -205,7 +207,7 @@ class FormGeneratorListener
         {
             $event = new CompileFormFieldsEvent($fields, $formId, $form);
             $formType->onCompileFormFields($event);
-            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.compile_form_fields');
+            $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.compile_form_fields");
             $fields = $event->getFields();
         }
         return $fields;
@@ -224,5 +226,4 @@ class FormGeneratorListener
         }
         return $buffer;
     }
-
 }

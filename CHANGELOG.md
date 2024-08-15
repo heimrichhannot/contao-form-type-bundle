@@ -2,9 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.11] - 2024-07-19
+- Fixed: deprecated VERSION constant
+
+## [0.1.10] - 2024-07-11
+- Fixed: compile error on missing type
+
+## [0.1.9] - 2024-04-30
+- Changed: require at least php 8.1
+- Changed: LoadFormFieldEvent now containers the form context
+- Deprecated: LoadFormFieldEvent::setWidget()
+
+## [0.1.8] - 2024-02-02
+- Added: form events
+
 ## [0.1.7] - 2023-12-11
-- Feature: Forms can now be edited
-- Feature: Custom form context support
+- Added: Forms can now be edited
+- Added: Custom form context support
 
 ## [0.1.5] - 2023-11-07
 - Added: getForm hook

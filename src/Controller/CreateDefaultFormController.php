@@ -21,23 +21,30 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CreateDefaultFormController extends AbstractController
 {
-    private Security $security;
-    private FormTypeCollection $formTypeCollection;
-    private UrlGeneratorInterface $urlGenerator;
-    private CsrfTokenManagerInterface $csrfTokenManager;
-    private ParameterBagInterface $parameterBag;
-    private TranslatorInterface $translator;
+    private readonly Security $security;
 
-    public function __construct(Security $security, FormTypeCollection $formTypeCollection, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, ParameterBagInterface $parameterBag, TranslatorInterface $translator)
-    {
+    private readonly UrlGeneratorInterface $urlGenerator;
+
+    private readonly CsrfTokenManagerInterface $csrfTokenManager;
+
+    private readonly ParameterBagInterface $parameterBag;
+
+    private readonly TranslatorInterface $translator;
+
+    public function __construct(
+        Security $security,
+        private readonly FormTypeCollection $formTypeCollection,
+        UrlGeneratorInterface $urlGenerator,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        ParameterBagInterface $parameterBag,
+        TranslatorInterface $translator
+    ) {
         $this->security = $security;
-        $this->formTypeCollection = $formTypeCollection;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->parameterBag = $parameterBag;
         $this->translator = $translator;
     }
-
 
     public function __invoke(Request $request): Response
     {

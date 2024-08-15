@@ -8,14 +8,14 @@ use Contao\Widget;
 class ValidateFormFieldEvent extends AbstractFormEvent
 {
     private Widget $widget;
-    private string $formId;
-    private array $formData;
 
-    public function __construct(Widget $widget, string $formId, array $formData, Form $form)
-    {
+    public function __construct(
+        Widget $widget,
+        private readonly string $formId,
+        private array $formData,
+        Form $form
+    ) {
         $this->widget = $widget;
-        $this->formId = $formId;
-        $this->formData = $formData;
         $this->form = $form;
     }
 

@@ -10,11 +10,9 @@ use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
  */
 class FormTypeFieldOptionsCallback
 {
-    private FormTypeCollection $formTypeCollection;
-
-    public function __construct(FormTypeCollection $formTypeCollection)
-    {
-        $this->formTypeCollection = $formTypeCollection;
+    public function __construct(
+        private readonly FormTypeCollection $formTypeCollection
+    ) {
     }
 
     public function __invoke(): array
@@ -27,5 +25,4 @@ class FormTypeFieldOptionsCallback
 
         return $options;
     }
-
 }

@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class FormTypePass implements CompilerPassInterface
 {
-
     public function process(ContainerBuilder $container): void
     {
         if (!$container->has(FormTypeCollection::class)) {

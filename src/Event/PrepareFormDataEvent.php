@@ -6,15 +6,12 @@ use Contao\Form;
 
 class PrepareFormDataEvent extends AbstractFormEvent
 {
-    private array $data;
-    private array $labels;
-    private array $fields;
-
-    public function __construct(array $data, array $labels, array $fields, Form $form)
-    {
-        $this->data = $data;
-        $this->labels = $labels;
-        $this->fields = $fields;
+    public function __construct(
+        private array $data,
+        private readonly array $labels,
+        private readonly array $fields,
+        Form $form
+    ) {
         $this->form = $form;
     }
 

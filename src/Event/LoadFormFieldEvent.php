@@ -5,24 +5,26 @@ namespace HeimrichHannot\FormTypeBundle\Event;
 use Contao\Form;
 use Contao\Widget;
 use HeimrichHannot\FormTypeBundle\FormType\FormContext;
+use Symfony\Contracts\EventDispatcher\Event;
 
-class LoadFormFieldEvent extends AbstractFormEvent
+class LoadFormFieldEvent extends Event
 {
     public function __construct(
         private Widget $widget,
-        private string $formId,
+        private readonly string $formId,
         private array $formData,
-        private FormContext $formContext,
-        Form $form
-    ) {
-        $this->form = $form;
-    }
+        private readonly Form $form,
+        private readonly FormContext $formContext
+    ) {}
 
     public function getWidget(): Widget
     {
         return $this->widget;
     }
 
+    /**
+     * @deprecated Not necessary. Use getWidget() instead
+     */
     public function setWidget(Widget $widget): void
     {
         $this->widget = $widget;
@@ -43,13 +45,13 @@ class LoadFormFieldEvent extends AbstractFormEvent
         $this->formData = $formData;
     }
 
+    public function getForm(): Form
+    {
+        return $this->form;
+    }
+
     public function getFormContext(): FormContext
     {
         return $this->formContext;
-    }
-
-    public function setFormContext(FormContext $formContext): void
-    {
-        $this->formContext = $formContext;
     }
 }

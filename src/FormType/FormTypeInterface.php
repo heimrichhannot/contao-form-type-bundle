@@ -54,5 +54,4 @@ interface FormTypeInterface
     public function onCompileFormFields(CompileFormFieldsEvent $event): void;
 
     public function onLoadFormField(LoadFormFieldEvent $event): void;
-
 }
