@@ -19,6 +19,7 @@ use HeimrichHannot\FormTypeBundle\Event\PrepareFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ProcessFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\StoreFormDataEvent;
 use HeimrichHannot\FormTypeBundle\Event\ValidateFormFieldEvent;
+use HeimrichHannot\FormTypeBundle\FormType\AbstractFormType;
 use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -29,66 +30,89 @@ class FormGeneratorListener
     public function __construct(
         private readonly FormTypeCollection       $formTypeCollection,
         private readonly EventDispatcherInterface $eventDispatcher
-    )
-    {
-    }
+    ) {}
 
     /**
      * @Hook("loadFormField", priority=17)
      */
     public function onLoadFormField(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
-        if ($formType = $this->formTypeCollection->getType($form))
-        {
-            if (in_array($widget->type, ['select', 'radio', 'checkbox'])) {
-                /** @var FieldOptionsEvent $event */
-                $event = $this->eventDispatcher->dispatch(
-                    new FieldOptionsEvent($widget, $form, $widget->options),
-                    'huh.form_type.'.$formType->getType().'.'.str_replace('[]', '', $widget->name).'.options'
-                );
-                if ($event->isDirty()) {
-                    $options = $event->getOptions();
-                    if ($event->isEmptyOption()) {
-                        $options = array_merge([$event->createOptions('', $event->getEmptyOptionLabel())], $options);
-                    }
-                    $widget->options = $options;
-                }
-            }
-
-            $formContext = $formType->getFormContext();
-            $data = $formContext->getData();
-
-            if (!empty($widget->name) && !$formContext->isCreate()) {
-                $value = $data[str_replace('[]', '', $widget->name)] ?? null;
-                $value = StringUtil::deserialize($value) ?? $value ?? $widget->value;
-                $widget->value = $value;
-            }
-
-            if (Input::post('FORM_SUBMIT') !== $formId
-                && !$formContext->isCreate()
-                && in_array($widget->rgxp, ['date', 'time', 'datim']))
-            {
-                try {
-                    $date = Date::parse('Y-m-d H:i:s', $widget->value);
-                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $date);
-                    $widget->value = $dt ? match ($widget->rgxp) {
-                        'date' => $dt->format(Date::getNumericDateFormat()),
-                        'time' => $dt->format(Date::getNumericTimeFormat()),
-                        'datim' => $dt->format(Date::getNumericDatimFormat()),
-                        default => $widget->value
-                    } : null;
-                } catch (\Exception) {
-                    $widget->value = null;
-                }
-            }
-
-            $event = new LoadFormFieldEvent($widget, $formId, $formData, $form);
-            $formType->onLoadFormField($event);
-            $this->eventDispatcher->dispatch($event, 'huh.form_type.'.$formType->getType().'.load_form_field');
-            $widget = $event->getWidget();
+        $formType = $this->formTypeCollection->getType($form);
+        if (!$formType) {
+            return $widget;
         }
 
-        return $widget;
+        if (\in_array($widget->type, ['select', 'radio', 'checkbox'])) {
+            $this->loadChoiceWidgetCallback($widget, $form, $formType);
+        }
+
+        $formContext = $formType->getFormContext($form);
+        $data = $formContext->getData();
+
+        if (!empty($widget->name) && !$formContext->isCreate()) {
+            $value = $data[str_replace('[]', '', $widget->name)] ?? null;
+            $value = StringUtil::deserialize($value) ?? $value ?? $widget->value;
+            $widget->value = $value;
+        }
+
+        if (Input::post('FORM_SUBMIT') !== $formId
+            && !$formContext->isCreate()
+            && \in_array($widget->rgxp, ['date', 'time', 'datim']))
+        {
+            try {
+                $date = Date::parse('Y-m-d H:i:s', $widget->value);
+                $dt = DateTime::createFromFormat('Y-m-d H:i:s', $date);
+                $widget->value = $dt ? match ($widget->rgxp) {
+                    'date' => $dt->format(Date::getNumericDateFormat()),
+                    'time' => $dt->format(Date::getNumericTimeFormat()),
+                    'datim' => $dt->format(Date::getNumericDatimFormat()),
+                    default => $widget->value
+                } : null;
+            } catch (\Exception) {
+                $widget->value = null;
+            }
+        }
+
+        $fieldOptionsEvent = new LoadFormFieldEvent($widget, $formId, $formData, $formContext, $form);
+        $formType->onLoadFormField($fieldOptionsEvent);
+        $this->eventDispatcher->dispatch($fieldOptionsEvent, 'huh.form_type.'.$formType->getType().'.load_form_field');
+
+        return $fieldOptionsEvent->getWidget();
+    }
+
+    private function loadChoiceWidgetCallback(
+        Widget           $widget,
+        Form             $form,
+        AbstractFormType $formType
+    ): void {
+        if (!\is_array($arrOptions = $widget->options) || empty($arrOptions))
+        {
+            $arrOptions = [];
+        }
+
+        /** @var FieldOptionsEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new FieldOptionsEvent($widget, $form, $arrOptions),
+            \sprintf(
+                'huh.form_type.%s.%s.options',
+                $formType->getType(),
+                \str_replace('[]', '', $widget->name)
+            )
+        );
+
+        if ($event->isDirty())
+        {
+            $options = $event->getOptions();
+
+            if ($event->isEmptyOption())
+            {
+                $options = \array_merge([
+                    $event->createOptions('', $event->getEmptyOptionLabel())
+                ], $options);
+            }
+
+            $widget->options = $options;
+        }
     }
 
     /**
