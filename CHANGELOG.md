@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2024-08-19
+- Added: Require form to evaluate form context
+- Added: Form context caching
+- Changed: Now using attributes instead of annotations
+- Changed: Minor refactoring for code quality and legibility
+- Removed: Support for Contao < 4.13
+
 ## [0.1.11] - 2024-07-19
 - Fixed: deprecated VERSION constant
 
