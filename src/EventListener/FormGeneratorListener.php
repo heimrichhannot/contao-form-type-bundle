@@ -3,6 +3,7 @@
 namespace HeimrichHannot\FormTypeBundle\EventListener;
 
 use Contao\CoreBundle\ContaoCoreBundle;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Date;
 use Contao\Form;
 use Contao\FormFieldModel;
@@ -32,9 +33,7 @@ class FormGeneratorListener
         private readonly EventDispatcherInterface $eventDispatcher
     ) {}
 
-    /**
-     * @Hook("loadFormField", priority=17)
-     */
+    #[AsHook("loadFormField", priority: 17)]
     public function onLoadFormField(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
         $formType = $this->formTypeCollection->getType($form);
@@ -115,49 +114,46 @@ class FormGeneratorListener
         }
     }
 
-    /**
-     * @Hook("prepareFormData", priority=17)
-     */
+    #[AsHook("prepareFormData", priority: 17)]
     public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form, array $files = []): void
     {
-        if ($formType = $this->formTypeCollection->getType($form))
-        {
-            if (\version_compare(ContaoCoreBundle::getVersion(), '5.0', '>=')) {
-                // Code for Contao 5.0 or later
-                $this->files[$form->formID] = $files;
-            } else {
-                // Code for Contao versions earlier than 5.0
-                $this->files[$form->formID] = $_SESSION['FILES'] ?? [];
-            }
-
-            foreach (FormFieldModel::findByPid($form->id) as $formField)
-            {
-                $data = $submittedData[$formField->name] ?? null;
-
-                if ($data === null) {
-                    continue;
-                }
-
-                if (in_array($formField->rgxp, ['date', 'time', 'datim'])) {
-                    $objDate = new Date($data, Date::getFormatFromRgxp($formField->rgxp));
-                    $submittedData[$formField->name] = $objDate->tstamp;
-                }
-
-                if (is_array($data)) {
-                    $submittedData[$formField->name] = serialize($data);
-                }
-            }
-
-            $event = new PrepareFormDataEvent($submittedData, $labels, $fields, $form);
-            $formType->onPrepareFormData($event);
-            $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.prepare_form_data");
-            $submittedData = $event->getData();
+        $formType = $this->formTypeCollection->getType($form);
+        if (!$formType) {
+            return;
         }
+
+        if (\version_compare(ContaoCoreBundle::getVersion(), '5.0', '>=')) {
+            // Code for Contao 5.0 or later
+            $this->files[$form->formID] = $files;
+        } else {
+            // Code for Contao versions earlier than 5.0
+            $this->files[$form->formID] = $_SESSION['FILES'] ?? [];
+        }
+
+        foreach (FormFieldModel::findByPid($form->id) as $formField)
+        {
+            $data = $submittedData[$formField->name] ?? null;
+            if ($data === null) {
+                continue;
+            }
+
+            if (\in_array($formField->rgxp, ['date', 'time', 'datim'])) {
+                $objDate = new Date($data, Date::getFormatFromRgxp($formField->rgxp));
+                $submittedData[$formField->name] = $objDate->tstamp;
+            }
+
+            if (\is_array($data)) {
+                $submittedData[$formField->name] = serialize($data);
+            }
+        }
+
+        $event = new PrepareFormDataEvent($submittedData, $labels, $fields, $form);
+        $formType->onPrepareFormData($event);
+        $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.prepare_form_data");
+        $submittedData = $event->getData();
     }
 
-    /**
-     * @Hook("storeFormData", priority=17)
-     */
+    #[AsHook("storeFormData", priority: 17)]
     public function onStoreFormData(array $data, Form $form): array
     {
         if ($formType = $this->formTypeCollection->getType($form))
@@ -170,9 +166,7 @@ class FormGeneratorListener
         return $data;
     }
 
-    /**
-     * @Hook("processFormData", priority=17)
-     */
+    #[AsHook("processFormData", priority: 17)]
     public function onProcessFormData(array $submittedData, array $formData, ?array $files, array $labels, Form $form): void
     {
         if ($formType = $this->formTypeCollection->getType($form))
@@ -183,9 +177,7 @@ class FormGeneratorListener
         }
     }
 
-    /**
-     * @Hook("validateFormField", priority=17)
-     */
+    #[AsHook("validateFormField", priority: 17)]
     public function onValidateFormField(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
         if ($formType = $this->formTypeCollection->getType($form))
@@ -198,9 +190,7 @@ class FormGeneratorListener
         return $widget;
     }
 
-    /**
-     * @Hook("compileFormFields", priority=17)
-     */
+    #[AsHook("compileFormFields", priority: 17)]
     public function onCompileFormFields(array $fields, string $formId, Form $form): array
     {
         if ($formType = $this->formTypeCollection->getType($form))
@@ -213,9 +203,7 @@ class FormGeneratorListener
         return $fields;
     }
 
-    /**
-     * @Hook("getForm", priority=17)
-     */
+    #[AsHook("getForm", priority: 17)]
     public function onGetForm(FormModel $formModel, string $buffer, Form $form): string
     {
         if ($formType = $this->formTypeCollection->getType($form))
