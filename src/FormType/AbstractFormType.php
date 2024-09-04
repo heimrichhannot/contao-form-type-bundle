@@ -3,6 +3,7 @@
 namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\DataContainer;
+use Contao\Form;
 use Contao\FormModel;
 use Contao\Model;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
@@ -19,9 +20,11 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberInterface
 {
+    protected const CACHE_FORM_CONTEXT = true;
     protected const DEFAULT_FORM_CONTEXT_TABLE = null;
 
     protected ?ContainerInterface $container = null;
+    private array $contextCache = [];
 
     /**
      * @required
@@ -44,12 +47,15 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
 
     public function getType(): string
     {
-        $className = ltrim(strrchr(static::class, '\\'), '\\');
+        $className = \ltrim(\strrchr(static::class, '\\'), '\\');
 
-        if (str_ends_with($className, 'FormType')) {
-            $className = substr($className, 0, -8);
-        } elseif (str_ends_with($className, 'Type')) {
-            $className = substr($className, 0, -4);
+        if (\str_ends_with($className, 'FormType'))
+        {
+            $className = \substr($className, 0, -8);
+        }
+        elseif (\str_ends_with($className, 'Type'))
+        {
+            $className = \substr($className, 0, -4);
         }
 
         return Container::underscore($className);
@@ -60,13 +66,27 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
         return [];
     }
 
-    final public function getFormContext(): FormContext
+    final public function invalidateCache(): void
     {
-        # todo: cache evaluations to improve performance
-        return $this->evaluateFormContext();
+        $this->contextCache = [];
     }
 
-    protected function evaluateFormContext(): FormContext
+    final public function getFormContext(Form $form, bool $cached = null): FormContext
+    {
+        if (!($cached ?? static::CACHE_FORM_CONTEXT)) {
+            return $this->evaluateFormContext($form);
+        }
+
+        $formId = $form->id;
+
+        if (!isset($this->contextCache[$formId])) {
+            $this->contextCache[$formId] = $this->evaluateFormContext($form);
+        }
+
+        return $this->contextCache[$formId];
+    }
+
+    protected function evaluateFormContext(Form $form): FormContext
     {
         if (!static::DEFAULT_FORM_CONTEXT_TABLE) {
             return FormContext::create();
@@ -75,7 +95,8 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
         $request = $this->container->get('request_stack')->getCurrentRequest();
         $editParameter = 'edit';
 
-        if ($modelPk = $request->query->get($editParameter)) {
+        if ($modelPk = $request->query->get($editParameter))
+        {
             /** @var class-string<Model> $modelClass */
             $modelClass = Model::getClassFromTable(static::DEFAULT_FORM_CONTEXT_TABLE);
             $modelInstance = $modelClass::findByPk($modelPk);
@@ -92,14 +113,17 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
 
     public function onPrepareFormData(PrepareFormDataEvent $event): void
     {
-        $formContext = $this->getFormContext();
+        $form = $event->getForm();
+        $formContext = $this->getFormContext($form);
 
-        if ($formContext->isInvalid()) {
+        if ($formContext->isInvalid())
+        {
             $errorClass = $formContext->getData()['_errorClass'] ?? BadRequestHttpException::class;
             throw new $errorClass($formContext->getData()['_detail'] ?? 'Invalid form context.');
         }
 
-        if ($formContext->isRead() || $formContext->isUpdate() || $formContext->isDelete()) {
+        if ($formContext->isRead() || $formContext->isUpdate() || $formContext->isDelete())
+        {
             $event->getForm()->storeValues = '';
         }
     }
@@ -110,7 +134,8 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
 
     public function onProcessFormData(ProcessFormDataEvent $event): void
     {
-        if ($this->getFormContext()->isUpdate()) {
+        if ($this->getFormContext($event->getForm())->isUpdate())
+        {
             $this->onUpdate($event);
         }
     }
@@ -133,23 +158,27 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
 
     protected function onUpdate(ProcessFormDataEvent $event): void
     {
-        $formContext = $this->getFormContext();
+        $form = $event->getForm();
+        $formContext = $this->getFormContext($form);
         $oldData = $formContext->getData();
         $newData = $event->getSubmittedData();
         $validKeys = array_keys($oldData);
 
         $setData = [];
 
-        foreach ($newData as $key => $newValue) {
+        foreach ($newData as $key => $newValue)
+        {
             if (in_array($key, ['dateAdded', 'alias'])
-                || !in_array($key, $validKeys)) {
+                || !in_array($key, $validKeys))
+            {
                 continue;
             }
 
             $oldValue = $oldData[$key] ?? null;
 
             if ($newValue !== $oldValue
-                && !(empty($newValue) && empty($oldValue))) {
+                && !(empty($newValue) && empty($oldValue)))
+            {
                 $setData[$key] = $newValue ?? null;
             }
         }
