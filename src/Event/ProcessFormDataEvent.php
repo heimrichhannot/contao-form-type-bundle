@@ -7,13 +7,13 @@ use Contao\Form;
 class ProcessFormDataEvent extends AbstractFormEvent
 {
     public function __construct(
-        private readonly array $submittedData,
-        private readonly array $formData,
-        private readonly ?array $files,
-        private readonly array $labels,
-        Form $form
+        public array $submittedData,
+        public readonly array $formData,
+        public readonly ?array $files,
+        public readonly array $labels,
+        public Form $form,
+        public readonly ?int $insertId = null,
     ) {
-        $this->form = $form;
     }
 
     public function getSubmittedData(): array

@@ -4,6 +4,7 @@ namespace HeimrichHannot\FormTypeBundle\EventListener;
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
+use Contao\Database;
 use Contao\Date;
 use Contao\Form;
 use Contao\FormFieldModel;
@@ -12,6 +13,7 @@ use Contao\Input;
 use Contao\StringUtil;
 use Contao\Widget;
 use DateTime;
+use Doctrine\DBAL\Connection;
 use HeimrichHannot\FormTypeBundle\Event\CompileFormFieldsEvent;
 use HeimrichHannot\FormTypeBundle\Event\FieldOptionsEvent;
 use HeimrichHannot\FormTypeBundle\Event\GetFormEvent;
@@ -30,7 +32,8 @@ class FormGeneratorListener
 
     public function __construct(
         private readonly FormTypeCollection       $formTypeCollection,
-        private readonly EventDispatcherInterface $eventDispatcher
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly Connection              $connection
     ) {}
 
     #[AsHook("loadFormField", priority: 17)]
@@ -167,13 +170,18 @@ class FormGeneratorListener
     }
 
     #[AsHook("processFormData", priority: 17)]
-    public function onProcessFormData(array $submittedData, array $formData, ?array $files, array $labels, Form $form): void
+    public function onProcessFormData(array &$submittedData, array $formData, ?array $files, array $labels, Form $form): void
     {
         if ($formType = $this->formTypeCollection->getType($form))
         {
-            $event = new ProcessFormDataEvent($submittedData, $formData, $files, $labels, $form);
+            if ($form->storeValues && $form->targetTable) {
+                $insertId = $this->connection->lastInsertId();
+            }
+
+            $event = new ProcessFormDataEvent($submittedData, $formData, $files, $labels, $form, $insertId);
             $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.process_form_data");
             $formType->onProcessFormData($event);
+            $submittedData = $event->getSubmittedData();
         }
     }
 

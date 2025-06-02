@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2025-06-02
+- Added: pass last insertId to processFormData event
+- Changed: make submitted data editable in processFormData event
+- Changed: make event properties public in processFormData event
+
 ## [0.2.0] - 2024-08-19
 - Added: Require form to evaluate form context
 - Added: Form context caching
