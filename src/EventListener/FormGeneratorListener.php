@@ -174,6 +174,7 @@ class FormGeneratorListener
     {
         if ($formType = $this->formTypeCollection->getType($form))
         {
+            $insertId = null;
             if ($form->storeValues && $form->targetTable) {
                 $insertId = $this->connection->lastInsertId();
             }

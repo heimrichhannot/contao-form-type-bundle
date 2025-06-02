@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2025-06-02
+- Fixed: undefined variable exception
+
 ## [0.2.1] - 2025-06-02
 - Added: pass last insertId to processFormData event
 - Changed: make submitted data editable in processFormData event
