@@ -3,10 +3,18 @@
 namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\Form;
+use Contao\FormModel;
+use Doctrine\DBAL\Connection;
 
 class FormTypeCollection
 {
     private array $types = [];
+
+    public function __construct(
+        private readonly Connection $connection,
+    )
+    {
+    }
 
     public function addType(AbstractFormType|FormTypeInterface $type): void
     {
@@ -23,6 +31,24 @@ class FormTypeCollection
         return is_string($formOrName)
             ? $this->getTypeByName($formOrName)
             : $this->getTypeOfForm($formOrName);
+    }
+
+    public function getFormsForFormType(string $type): array
+    {
+        if (null === $this->getTypeByName($type)) {
+            return [];
+        }
+
+        return $this->connection->createQueryBuilder()
+            ->select('id', 'title')
+            ->from('tl_form')
+            ->where('formType = :formType')
+            ->orderBy('title')
+            ->setParameter('formType', $type)
+            ->executeQuery()
+            ->fetchAllKeyValue()
+            ;
+
     }
 
     private function getTypeByName(string $type): AbstractFormType|FormTypeInterface|null

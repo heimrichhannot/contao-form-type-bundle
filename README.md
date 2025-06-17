@@ -123,6 +123,27 @@ class MyContainerOrFormType
 }
 ```
 
+### Get form options
+
+Use the `FormTypeCollection` class to get form options to use in your dca fields or wherever you need them.
+
+```php
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
+use HeimrichHannot\EventRegistrationBundle\FormType\EventRegistrationFormType;
+use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
+
+#[AsCallback(table: 'tl_calendar', target: 'fields.reg_form.options')]
+class FieldsRegFormOptionsListener
+{
+    private readonly FormTypeCollection $formTypeCollection,
+
+    public function __invoke(): array
+    {
+        return $this->formTypeCollection->getFormsForFormType(EventRegistrationFormType::TYPE);
+    }
+}
+```
+
 ### Form Context
 
 Implementing a form context evaluator on your from type allows you to change the form's behavior depending on the context it is used in.
