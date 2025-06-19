@@ -27,7 +27,7 @@ class ApplyFormTypeCallback
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function __invoke(DataContainer $dc = null): void
+    public function __invoke(?DataContainer $dc = null): void
     {
         if (!$dc || !$dc->id) {
             return;
