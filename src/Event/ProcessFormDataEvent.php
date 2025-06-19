@@ -10,7 +10,7 @@ class ProcessFormDataEvent extends AbstractFormEvent
         public array $submittedData,
         public readonly array $formData,
         public readonly ?array $files,
-        public readonly array $labels,
+        public array $labels,
         public Form $form,
         public readonly ?int $insertId = null,
     ) {

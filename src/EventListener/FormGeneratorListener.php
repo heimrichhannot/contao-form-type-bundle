@@ -170,7 +170,7 @@ class FormGeneratorListener
     }
 
     #[AsHook("processFormData", priority: 17)]
-    public function onProcessFormData(array &$submittedData, array $formData, ?array $files, array $labels, Form $form): void
+    public function onProcessFormData(array &$submittedData, array $formData, ?array $files, array &$labels, Form $form): void
     {
         if ($formType = $this->formTypeCollection->getType($form))
         {
@@ -182,7 +182,9 @@ class FormGeneratorListener
             $event = new ProcessFormDataEvent($submittedData, $formData, $files, $labels, $form, $insertId);
             $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.process_form_data");
             $formType->onProcessFormData($event);
-            $submittedData = $event->getSubmittedData();
+
+            $submittedData = $event->submittedData;
+            $labels = $event->labels;
         }
     }
 
