@@ -118,7 +118,7 @@ class FormGeneratorListener
     }
 
     #[AsHook("prepareFormData", priority: 17)]
-    public function onPrepareFormData(array &$submittedData, array $labels, array $fields, Form $form, array $files = []): void
+    public function onPrepareFormData(array &$submittedData, array &$labels, array $fields, Form $form, array $files = []): void
     {
         $formType = $this->formTypeCollection->getType($form);
         if (!$formType) {
@@ -153,7 +153,9 @@ class FormGeneratorListener
         $event = new PrepareFormDataEvent($submittedData, $labels, $fields, $form);
         $formType->onPrepareFormData($event);
         $this->eventDispatcher->dispatch($event, "huh.form_type.{$formType->getType()}.prepare_form_data");
-        $submittedData = $event->getData();
+
+        $submittedData = $event->data;
+        $labels = $event->labels;
     }
 
     #[AsHook("storeFormData", priority: 17)]

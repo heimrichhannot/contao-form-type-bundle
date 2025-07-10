@@ -113,7 +113,7 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
 
     public function onPrepareFormData(PrepareFormDataEvent $event): void
     {
-        $form = $event->getForm();
+        $form = $event->form;
         $formContext = $this->getFormContext($form);
 
         if ($formContext->isInvalid())
@@ -124,7 +124,7 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
 
         if ($formContext->isRead() || $formContext->isUpdate() || $formContext->isDelete())
         {
-            $event->getForm()->storeValues = '';
+            $event->form->storeValues = '';
         }
     }
 
