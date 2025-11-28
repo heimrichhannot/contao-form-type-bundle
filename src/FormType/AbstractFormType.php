@@ -71,7 +71,7 @@ abstract class AbstractFormType implements FormTypeInterface, ServiceSubscriberI
         $this->contextCache = [];
     }
 
-    final public function getFormContext(Form $form, bool $cached = null): FormContext
+    final public function getFormContext(Form $form, ?bool $cached = null): FormContext
     {
         if (!($cached ?? static::CACHE_FORM_CONTEXT)) {
             return $this->evaluateFormContext($form);
