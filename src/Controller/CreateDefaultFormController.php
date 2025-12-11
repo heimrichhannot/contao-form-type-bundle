@@ -11,8 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -21,22 +20,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CreateDefaultFormController extends AbstractController
 {
-    private readonly Security $security;
-
     public function __construct(
-        Security $security,
-        private readonly FormTypeCollection $formTypeCollection,
-        private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
-        private readonly ParameterBagInterface $parameterBag,
-        private readonly TranslatorInterface $translator
-    ) {
-        $this->security = $security;
-    }
+        private readonly FormTypeCollection            $formTypeCollection,
+        private readonly CsrfTokenManagerInterface     $csrfTokenManager,
+        private readonly ParameterBagInterface         $parameterBag,
+        private readonly TranslatorInterface           $translator,
+        private readonly AuthorizationCheckerInterface $auth,
+    ) {}
 
     public function __invoke(Request $request): Response
     {
-        if (!$this->security->isGranted('contao_user.modules', 'form')) {
+        if (!$this->auth->isGranted('contao_user.modules', 'form')) {
             return new Response('Access denied', 403);
         }
 
@@ -46,7 +40,7 @@ class CreateDefaultFormController extends AbstractController
             return new Response('Form not found', 404);
         }
 
-        if (!$this->security->isGranted('contao_user.forms', $formModel->id)) {
+        if (!$this->auth->isGranted('contao_user.forms', $formModel->id)) {
             return new Response('Access denied', 403);
         }
 

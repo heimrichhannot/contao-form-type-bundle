@@ -6,32 +6,32 @@ class FormContext
 {
     public static function create(?string $table = null): self
     {
-        return new static(FormContextAction::CREATE, $table);
+        return new self(FormContextAction::CREATE, $table);
     }
 
     public static function read(string $table, array $data): self
     {
-        return new static(FormContextAction::READ, $table, $data);
+        return new self(FormContextAction::READ, $table, $data);
     }
 
     public static function update(string $table, array $data): self
     {
-        return new static(FormContextAction::UPDATE, $table, $data);
+        return new self(FormContextAction::UPDATE, $table, $data);
     }
 
     public static function delete(string $table, ?array $data = null): self
     {
-        return new static(FormContextAction::DELETE, $table, $data);
+        return new self(FormContextAction::DELETE, $table, $data);
     }
 
     public static function clone(string $table, ?array $data = null): self
     {
-        return new static(FormContextAction::CLONE, $table, $data);
+        return new self(FormContextAction::CLONE, $table, $data);
     }
 
     public static function invalid(?string $table = null, mixed $detail = null, ?array $moreData = []): self
     {
-        return new static(FormContextAction::INVALID, $table, [
+        return new self(FormContextAction::INVALID, $table, [
             '_detail' => $detail,
             ...$moreData,
         ]);
