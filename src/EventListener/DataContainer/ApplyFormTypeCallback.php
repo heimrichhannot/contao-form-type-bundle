@@ -2,7 +2,7 @@
 
 namespace HeimrichHannot\FormTypeBundle\EventListener\DataContainer;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\FormFieldModel;
 use Contao\FormModel;
@@ -11,9 +11,7 @@ use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Callback(table="tl_form", target="config.onload")
- */
+#[AsCallback(table: 'tl_form', target: 'config.onload')]
 class ApplyFormTypeCallback
 {
     private readonly TranslatorInterface $translator;
@@ -29,7 +27,7 @@ class ApplyFormTypeCallback
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function __invoke(DataContainer $dc = null): void
+    public function __invoke(?DataContainer $dc = null): void
     {
         if (!$dc || !$dc->id) {
             return;

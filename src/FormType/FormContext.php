@@ -24,7 +24,7 @@ class FormContext
         return new static(FormContextAction::DELETE, $table, $data);
     }
 
-    public static function clone(string $table, array $data = null): self
+    public static function clone(string $table, ?array $data = null): self
     {
         return new static(FormContextAction::CLONE, $table, $data);
     }

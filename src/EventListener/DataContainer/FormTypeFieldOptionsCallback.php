@@ -2,12 +2,10 @@
 
 namespace HeimrichHannot\FormTypeBundle\EventListener\DataContainer;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 
-/**
- * @Callback(table="tl_form", target="fields.formType.options")
- */
+#[AsCallback(table: 'tl_form', target: 'fields.formType.options')]
 class FormTypeFieldOptionsCallback
 {
     public function __construct(

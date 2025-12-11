@@ -3,7 +3,6 @@
 namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\Form;
-use Contao\FormModel;
 use Doctrine\DBAL\Connection;
 
 class FormTypeCollection

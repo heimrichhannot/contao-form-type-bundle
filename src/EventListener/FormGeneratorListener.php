@@ -4,7 +4,6 @@ namespace HeimrichHannot\FormTypeBundle\EventListener;
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
-use Contao\Database;
 use Contao\Date;
 use Contao\Form;
 use Contao\FormFieldModel;

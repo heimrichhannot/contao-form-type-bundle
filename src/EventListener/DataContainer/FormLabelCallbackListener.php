@@ -2,14 +2,12 @@
 
 namespace HeimrichHannot\FormTypeBundle\EventListener\DataContainer;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Callback(table="tl_form", target="list.label.label")
- */
+#[AsCallback(table: 'tl_form', target: 'list.label.label')]
 class FormLabelCallbackListener
 {
     private readonly TranslatorInterface $translator;

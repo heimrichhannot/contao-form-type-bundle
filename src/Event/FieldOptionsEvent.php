@@ -37,13 +37,13 @@ class FieldOptionsEvent extends Event
         return $this->form;
     }
 
-    public function addOption(string $value, string $label = null): void
+    public function addOption(string $value, ?string $label = null): void
     {
         $this->options[] = $this->createOptions($value, $label);
         $this->dirty = true;
     }
 
-    public function createOptions(string $value, string $label = null): array
+    public function createOptions(string $value, ?string $label = null): array
     {
         if (!$label) {
             $label = $value;
