@@ -7,13 +7,10 @@ use Contao\FormModel;
 
 class GetFormEvent extends AbstractFormEvent
 {
-    private readonly FormModel $formModel;
-
     private string $buffer;
 
-    public function __construct(FormModel $formModel, string &$buffer, Form $form)
+    public function __construct(private readonly FormModel $formModel, string &$buffer, Form $form)
     {
-        $this->formModel = $formModel;
         $this->buffer = &$buffer;
         $this->form = $form;
     }

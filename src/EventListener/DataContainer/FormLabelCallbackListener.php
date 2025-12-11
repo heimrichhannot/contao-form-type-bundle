@@ -10,13 +10,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsCallback(table: 'tl_form', target: 'list.label.label')]
 class FormLabelCallbackListener
 {
-    private readonly TranslatorInterface $translator;
-
-    public function __construct(
-        TranslatorInterface $translator,
-        private readonly FormTypeCollection $formTypeCollection
-    ) {
-        $this->translator = $translator;
+    public function __construct(private readonly TranslatorInterface $translator, private readonly FormTypeCollection $formTypeCollection)
+    {
     }
 
     public function __invoke(array $row, string $label, DataContainer $dc, array $labels): string

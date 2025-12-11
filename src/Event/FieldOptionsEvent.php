@@ -8,23 +8,14 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class FieldOptionsEvent extends Event
 {
-    private readonly Widget $widget;
-
-    private readonly Form $form;
-
     private bool $dirty = false;
 
     private bool $emptyOption = false;
 
     private string $emptyOptionLabel = '-';
 
-    public function __construct(
-        Widget $widget,
-        Form $form,
-        private array $options = []
-    ) {
-        $this->widget = $widget;
-        $this->form = $form;
+    public function __construct(private readonly Widget $widget, private readonly Form $form, private array $options = [])
+    {
     }
 
     public function getWidget(): Widget

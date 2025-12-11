@@ -23,27 +23,15 @@ class CreateDefaultFormController extends AbstractController
 {
     private readonly Security $security;
 
-    private readonly UrlGeneratorInterface $urlGenerator;
-
-    private readonly CsrfTokenManagerInterface $csrfTokenManager;
-
-    private readonly ParameterBagInterface $parameterBag;
-
-    private readonly TranslatorInterface $translator;
-
     public function __construct(
         Security $security,
         private readonly FormTypeCollection $formTypeCollection,
-        UrlGeneratorInterface $urlGenerator,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ParameterBagInterface $parameterBag,
-        TranslatorInterface $translator
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly ParameterBagInterface $parameterBag,
+        private readonly TranslatorInterface $translator
     ) {
         $this->security = $security;
-        $this->urlGenerator = $urlGenerator;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->parameterBag = $parameterBag;
-        $this->translator = $translator;
     }
 
     public function __invoke(Request $request): Response
