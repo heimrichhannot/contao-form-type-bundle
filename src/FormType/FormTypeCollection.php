@@ -4,6 +4,7 @@ namespace HeimrichHannot\FormTypeBundle\FormType;
 
 use Contao\Form;
 use Doctrine\DBAL\Connection;
+use HeimrichHannot\FormTypeBundle\Model\FormModel;
 
 class FormTypeCollection
 {
@@ -57,6 +58,8 @@ class FormTypeCollection
 
     private function getTypeOfForm(Form $form): AbstractFormType|FormTypeInterface|null
     {
-        return $form->formType ? $this->getTypeByName($form->formType) : null;
+        /** @var FormModel $model */
+        $model = $form->getModel();
+        return $model->formType ? $this->getTypeByName($form->formType) : null;
     }
 }
