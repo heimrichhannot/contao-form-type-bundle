@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.8] - 2025-12-11
+- Added: english locales
+
 ## [0.2.7] - 2025-12-11
 - Fixed: some warnings and deprecations
 
