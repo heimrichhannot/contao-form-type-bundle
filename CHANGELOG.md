@@ -2,8 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.2.6] - 2025-12-11
+## [0.2.7] - 2025-12-11
 - Fixed: some warnings and deprecations
+
+## [0.2.6] - 2025-11-28
+- Changed: raised dependencies
+- Fixed: deprecation warning
 
 ## [0.2.5] - 2025-07-10
 - Changed: make label editable in prepareFormData event
