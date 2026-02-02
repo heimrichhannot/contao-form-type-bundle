@@ -108,12 +108,65 @@ class FormGeneratorListener
             if ($event->isEmptyOption())
             {
                 $options = \array_merge([
-                    $event->createOptions('', $event->getEmptyOptionLabel())
+                    $event->createOptions('', $event->getEmptyOptionLabel()),
                 ], $options);
             }
 
+            $options = $event->isGrouped()
+                ? $this->formatGroupedOptions($options, $event->isSorted())
+                : $this->formatUngroupedOptions($options, $event->isSorted());
+
             $widget->options = $options;
         }
+    }
+
+    private function formatGroupedOptions(array $options, bool $sorted): array
+    {
+        \usort($options, static function ($a, $b) use ($sorted): int {
+            $comp = ($a['group'] ?? '') <=> ($b['group'] ?? '');
+            if ($comp || !$sorted) {
+                return $comp;
+            }
+            $aa = \mb_strtolower($a['label'] ?? $a['value'] ?? '');
+            $bb = \mb_strtolower($b['label'] ?? $b['value'] ?? '');
+            return $aa <=> $bb;
+        });
+
+        $return = [];
+        $previousGroup = null;
+
+        foreach ($options as $setting)
+        {
+            $group = ($setting['group'] ?? null) ?: null;
+            unset($setting['group']);
+
+            if ($group !== $previousGroup)
+            {
+                $previousGroup = $group;
+                $return[] = ['group' => $group, 'label' => $group];
+            }
+
+            $return[] = $setting;
+        }
+
+        return $return;
+    }
+
+    private function formatUngroupedOptions(array $options, bool $sorted): array
+    {
+        \array_walk($options, static function (array &$option) {
+            unset($option['group']);
+        });
+
+        if ($sorted) {
+            \usort($options, static function (array $a, array $b) {
+                $aa = \mb_strtolower($a['label'] ?? $a['value'] ?? '');
+                $bb = \mb_strtolower($b['label'] ?? $b['value'] ?? '');
+                return $aa <=> $bb;
+            });
+        }
+
+        return $options;
     }
 
     #[AsHook("prepareFormData", priority: 17)]
