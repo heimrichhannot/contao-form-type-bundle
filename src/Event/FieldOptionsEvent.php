@@ -51,7 +51,7 @@ class FieldOptionsEvent extends Event
         ];
     }
 
-    public function setOptions(array $options = []): self
+    public function setOptions(array $options): self
     {
         $this->options = $options;
         $this->dirty = true;
@@ -95,7 +95,7 @@ class FieldOptionsEvent extends Event
      * values.
      *
      * @param array $values The option values
-     * @param array $reference A optional language array
+     * @param array $reference An optional language array
      */
     public function setOptionsByValues(array $values, array $reference = []): self
     {
