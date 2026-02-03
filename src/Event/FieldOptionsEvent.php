@@ -10,7 +10,8 @@ class FieldOptionsEvent extends Event
 {
     private bool $dirty = false;
     private bool $emptyOption = false;
-    private bool $grouped = false;
+    private ?bool $grouped = null;
+    private bool $autoGrouped = false;
     private bool $sorted = false;
 
     private string $emptyOptionLabel = '-';
@@ -35,6 +36,11 @@ class FieldOptionsEvent extends Event
     {
         $this->options[] = $this->createOptions($value, $label, $group);
         $this->dirty = true;
+
+        if (!\is_null($group)) {
+            $this->autoGrouped = true;
+        }
+
         return $this;
     }
 
@@ -70,10 +76,10 @@ class FieldOptionsEvent extends Event
 
     public function isGrouped(): bool
     {
-        return $this->grouped;
+        return $this->grouped ?? $this->autoGrouped;
     }
 
-    public function setGrouped(bool $grouped): self
+    public function setGrouped(?bool $grouped): self
     {
         $this->grouped = $grouped;
         return $this;
