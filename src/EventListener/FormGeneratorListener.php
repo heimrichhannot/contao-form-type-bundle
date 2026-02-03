@@ -142,8 +142,16 @@ class FormGeneratorListener
 
             if ($group !== $previousGroup)
             {
+                $groupAlias = \preg_replace('/[^a-z0-9]/i', '_', \strtolower($group));
+                $groupAlias = \preg_replace('/_+/', '_', $groupAlias);
+                $groupAlias = \substr($groupAlias, 0, 10);
+
                 $previousGroup = $group;
-                $return[] = ['group' => $group, 'label' => $group];
+                $return[] = [
+                    'group' => $group,
+                    'label' => $group,
+                    'value' => "__group__{$groupAlias}__"
+                ];
             }
 
             $return[] = $setting;
