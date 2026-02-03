@@ -95,6 +95,16 @@ class OptionsEventListener implements EventSubscriberInterface
         $event->addOption('adobe', 'Adobe');
         $event->addOption('istock', 'iStock');
     }
+    
+    public function onTopicOptions(FieldOptionsEvent $event): void
+    {
+        $event->addOption('cinema', 'Cinema', 'entertainment');
+        $event->addOption('music', 'Music', 'entertainment');
+        
+        $event->addOption('politics', 'Politics', 'news');
+        $event->addOption('sport', 'Sport', 'news');
+        $event->addOption('culture', 'Culture', 'news');
+    }
 }
 ```
 

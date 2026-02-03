@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [feature/grouped-options] - 02-02-2025
+- Added: ability to group options via the `FieldOptionsEvent`
+- Added: `FieldOptionsEvent` can now be enabled to sort options alphabetically
+- Added: fluent interface for `FieldOptionsEvent` setters
+- Changed: Removed default empty array parameter value from `FieldOptionsEvent::setOptions(array)`
+
 ## [0.2.8] - 2025-12-11
 - Added: english locales
 
