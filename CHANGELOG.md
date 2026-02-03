@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.10] - 2025-02-03
+- Fixed: error when submitting a form with grouped options select
+
 ## [0.2.9] - 2025-02-03
 - Added: ability to group options via the `FieldOptionsEvent`
 - Added: `FieldOptionsEvent` can now be enabled to sort options alphabetically
