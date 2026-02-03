@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [feature/grouped-options] - 02-02-2025
+## [0.2.9] - 2025-02-03
 - Added: ability to group options via the `FieldOptionsEvent`
 - Added: `FieldOptionsEvent` can now be enabled to sort options alphabetically
 - Added: fluent interface for `FieldOptionsEvent` setters
