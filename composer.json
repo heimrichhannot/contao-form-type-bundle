@@ -23,7 +23,10 @@
         "php": "^8.2",
         "contao/core-bundle": "^4.13 || ^5.2",
         "symfony/security-core": "^5.4 || ^6.0 || ^7.0",
+        "symfony/dependency-injection": "^5.4 || ^6.0 || ^7.0",
         "symfony/event-dispatcher-contracts": "^1.0 || ^2.0 || ^3.0",
+        "symfony/http-foundation": "^5.4 || ^6.0 || ^7.0",
+        "symfony/routing": "^5.4 || ^6.0 || ^7.0",
         "symfony/translation-contracts": "^1.0 || ^2.0 || ^3.0"
     },
     "autoload": {
@@ -35,7 +38,7 @@
         "contao-manager-plugin": "HeimrichHannot\\FormTypeBundle\\ContaoManager\\Plugin"
     },
     "require-dev": {
-        "rector/rector": "^2.2",
+        "rector/rector": "^2.3",
         "contao/contao-rector": "dev-main",
         "symplify/easy-coding-standard": "^13.0",
         "phpstan/phpstan": "^2.1",

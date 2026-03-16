@@ -2,6 +2,7 @@
 
 namespace HeimrichHannot\FormTypeBundle\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use Contao\CoreBundle\Controller\AbstractController;
 use Contao\FormFieldModel;
 use Contao\FormModel;
@@ -10,14 +11,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/contao/form-type/fieldwizard/", name="form_type_wizard", defaults={"_scope" = "backend", "_token_check" = true})
- */
+#[Route(path: "/contao/form-type/fieldwizard/", name: "form_type_wizard", defaults: ["_scope" => "backend", "_token_check" => true])]
 class CreateDefaultFormController extends AbstractController
 {
     public function __construct(

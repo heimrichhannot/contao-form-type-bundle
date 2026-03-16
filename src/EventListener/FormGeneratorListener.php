@@ -127,8 +127,8 @@ class FormGeneratorListener
             if ($comp || !$sorted) {
                 return $comp;
             }
-            $aa = \mb_strtolower($a['label'] ?? $a['value'] ?? '');
-            $bb = \mb_strtolower($b['label'] ?? $b['value'] ?? '');
+            $aa = \mb_strtolower((string) ($a['label'] ?? $a['value'] ?? ''));
+            $bb = \mb_strtolower((string) ($b['label'] ?? $b['value'] ?? ''));
             return $aa <=> $bb;
         });
 
@@ -142,9 +142,9 @@ class FormGeneratorListener
 
             if ($group !== $previousGroup)
             {
-                $groupAlias = \preg_replace('/[^a-z0-9]/i', '_', \strtolower($group));
-                $groupAlias = \preg_replace('/_+/', '_', $groupAlias);
-                $groupAlias = \substr($groupAlias, 0, 10);
+                $groupAlias = \preg_replace('/[^a-z0-9]/i', '_', \strtolower((string) $group));
+                $groupAlias = \preg_replace('/_+/', '_', (string) $groupAlias);
+                $groupAlias = \substr((string) $groupAlias, 0, 10);
 
                 $previousGroup = $group;
                 $return[] = [
@@ -168,8 +168,8 @@ class FormGeneratorListener
 
         if ($sorted) {
             \usort($options, static function (array $a, array $b) {
-                $aa = \mb_strtolower($a['label'] ?? $a['value'] ?? '');
-                $bb = \mb_strtolower($b['label'] ?? $b['value'] ?? '');
+                $aa = \mb_strtolower((string) ($a['label'] ?? $a['value'] ?? ''));
+                $bb = \mb_strtolower((string) ($b['label'] ?? $b['value'] ?? ''));
                 return $aa <=> $bb;
             });
         }

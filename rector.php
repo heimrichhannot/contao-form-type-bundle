@@ -29,6 +29,7 @@ return RectorConfig::configure()
         removeUnusedImports: true
     )
     ->withComposerBased(
+        twig: true,
         doctrine: true,
         phpunit: true,
         symfony: true,
@@ -40,6 +41,6 @@ return RectorConfig::configure()
         ContaoSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ])
     ->withSkip([
-        ArrayToFirstClassCallableRector::class
+        ArrayToFirstClassCallableRector::class,
     ])
 ;

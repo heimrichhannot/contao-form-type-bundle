@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.11] - 2026-03-16
+- Changed: allow symfony 7
+- 
+
 ## [0.2.10] - 2025-02-03
 - Fixed: error when submitting a form with grouped options select
 
