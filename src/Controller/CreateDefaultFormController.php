@@ -10,15 +10,10 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route(path: '/contao/form-type/fieldwizard/', name: 'form_type_wizard', defaults: [
-    '_scope' => 'backend',
-    '_token_check' => true,
-])]
 class CreateDefaultFormController extends AbstractController
 {
     public function __construct(

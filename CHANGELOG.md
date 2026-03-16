@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.12] - 2026-03-16
+- Fixed: bc break with symfony 5 in 0.2.11
+
 ## [0.2.11] - 2026-03-16
 - Changed: allow symfony 7
 

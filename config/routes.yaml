@@ -1,3 +1,6 @@
-huh.form_type.controller:
-  resource: ../src/Controller
-  type: attribute
+form_type_wizard:
+  path: /contao/form-type/fieldwizard/
+  controller: HeimrichHannot\FormTypeBundle\Controller\CreateDefaultFormController
+  defaults:
+    _scope: backend
+    _token_check: true
