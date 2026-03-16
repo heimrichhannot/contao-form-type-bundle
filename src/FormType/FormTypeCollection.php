@@ -12,8 +12,7 @@ class FormTypeCollection
 
     public function __construct(
         private readonly Connection $connection,
-    )
-    {
+    ) {
     }
 
     public function addType(AbstractFormType|FormTypeInterface $type): void
@@ -47,8 +46,7 @@ class FormTypeCollection
             ->setParameter('formType', $type)
             ->executeQuery()
             ->fetchAllKeyValue()
-            ;
-
+        ;
     }
 
     private function getTypeByName(string $type): AbstractFormType|FormTypeInterface|null
@@ -60,6 +58,7 @@ class FormTypeCollection
     {
         /** @var FormModel $model */
         $model = $form->getModel();
+
         return $model->formType ? $this->getTypeByName($form->formType) : null;
     }
 }

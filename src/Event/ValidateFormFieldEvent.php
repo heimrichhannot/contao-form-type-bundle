@@ -11,7 +11,7 @@ class ValidateFormFieldEvent extends AbstractFormEvent
         private Widget $widget,
         private readonly string $formId,
         private array $formData,
-        Form $form
+        Form $form,
     ) {
         $this->form = $form;
     }

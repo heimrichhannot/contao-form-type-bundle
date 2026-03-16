@@ -14,8 +14,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsCallback(table: 'tl_form', target: 'config.onload')]
 class ApplyFormTypeCallback
 {
-    public function __construct(private readonly FormTypeCollection $formTypeCollection, private readonly TranslatorInterface $translator, private readonly UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private readonly FormTypeCollection $formTypeCollection,
+        private readonly TranslatorInterface $translator,
+        private readonly UrlGeneratorInterface $urlGenerator,
+    ) {
     }
 
     public function __invoke(?DataContainer $dc = null): void

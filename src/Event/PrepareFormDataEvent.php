@@ -10,7 +10,7 @@ class PrepareFormDataEvent
         public array $data,
         public array $labels,
         public readonly array $fields,
-        public readonly Form $form
+        public readonly Form $form,
     ) {
     }
 
@@ -53,6 +53,4 @@ class PrepareFormDataEvent
     {
         return $this->form;
     }
-
-
 }

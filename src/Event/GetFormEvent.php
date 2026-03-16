@@ -9,8 +9,11 @@ class GetFormEvent extends AbstractFormEvent
 {
     private string $buffer;
 
-    public function __construct(private readonly FormModel $formModel, string &$buffer, Form $form)
-    {
+    public function __construct(
+        private readonly FormModel $formModel,
+        string &$buffer,
+        Form $form,
+    ) {
         $this->buffer = &$buffer;
         $this->form = $form;
     }

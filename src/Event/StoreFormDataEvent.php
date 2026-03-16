@@ -9,7 +9,7 @@ class StoreFormDataEvent extends AbstractFormEvent
     public function __construct(
         private array $data,
         Form $form,
-        private readonly array $files
+        private readonly array $files,
     ) {
         $this->form = $form;
     }

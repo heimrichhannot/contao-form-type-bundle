@@ -18,9 +18,10 @@ class FieldOptionsEvent extends Event
 
     public function __construct(
         private readonly Widget $widget,
-        private readonly Form   $form,
-        private array           $options = []
-    ) {}
+        private readonly Form $form,
+        private array $options = [],
+    ) {
+    }
 
     public function getWidget(): Widget
     {
@@ -51,9 +52,9 @@ class FieldOptionsEvent extends Event
         }
 
         return [
-            "group" => $group,
-            "value" => $value,
-            "label" => $label,
+            'group' => $group,
+            'value' => $value,
+            'label' => $label,
         ];
     }
 
@@ -61,6 +62,7 @@ class FieldOptionsEvent extends Event
     {
         $this->options = $options;
         $this->dirty = true;
+
         return $this;
     }
 
@@ -82,6 +84,7 @@ class FieldOptionsEvent extends Event
     public function setGrouped(?bool $grouped): self
     {
         $this->grouped = $grouped;
+
         return $this;
     }
 
@@ -93,6 +96,7 @@ class FieldOptionsEvent extends Event
     public function setSorted(bool $sorted): self
     {
         $this->sorted = $sorted;
+
         return $this;
     }
 
@@ -100,7 +104,7 @@ class FieldOptionsEvent extends Event
      * Set options by values. If a reference array is given, the values will be used as keys and the reference array as
      * values.
      *
-     * @param array $values The option values
+     * @param array $values    The option values
      * @param array $reference An optional language array
      */
     public function setOptionsByValues(array $values, array $reference = []): self
@@ -111,6 +115,7 @@ class FieldOptionsEvent extends Event
         }
 
         $this->dirty = true;
+
         return $this;
     }
 
@@ -122,6 +127,7 @@ class FieldOptionsEvent extends Event
         }
 
         $this->dirty = true;
+
         return $this;
     }
 
@@ -129,6 +135,7 @@ class FieldOptionsEvent extends Event
     {
         $this->emptyOption = $emptyOption;
         $this->emptyOptionLabel = $label;
+
         return $this;
     }
 

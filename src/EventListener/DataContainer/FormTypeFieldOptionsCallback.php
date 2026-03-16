@@ -9,7 +9,7 @@ use HeimrichHannot\FormTypeBundle\FormType\FormTypeCollection;
 class FormTypeFieldOptionsCallback
 {
     public function __construct(
-        private readonly FormTypeCollection $formTypeCollection
+        private readonly FormTypeCollection $formTypeCollection,
     ) {
     }
 

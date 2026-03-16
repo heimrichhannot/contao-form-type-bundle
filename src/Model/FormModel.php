@@ -7,5 +7,4 @@ namespace HeimrichHannot\FormTypeBundle\Model;
  */
 class FormModel extends \Contao\FormModel
 {
-
 }

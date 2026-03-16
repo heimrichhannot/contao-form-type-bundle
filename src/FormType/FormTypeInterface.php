@@ -13,7 +13,8 @@ use HeimrichHannot\FormTypeBundle\Event\ValidateFormFieldEvent;
 
 /**
  * @internal Do not use this class in your code. It is only public for reasons of backward compatibility.
- * @deprecated Use AbstractFormType instead.
+ *
+ * @deprecated use AbstractFormType instead
  */
 interface FormTypeInterface
 {
@@ -23,7 +24,7 @@ interface FormTypeInterface
     public function getType(): string;
 
     /**
-     * Return the default fields for the current form type. Will be used for the first time wizard
+     * Return the default fields for the current form type. Will be used for the first time wizard.
      *
      * Example:
      * ```php
