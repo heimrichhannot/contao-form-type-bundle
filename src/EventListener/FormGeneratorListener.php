@@ -196,6 +196,9 @@ class FormGeneratorListener
             }
 
             if (\in_array($formField->rgxp, ['date', 'time', 'datim'])) {
+                if ('' === $data) {
+                    continue;
+                }
                 $objDate = new Date($data, Date::getFormatFromRgxp($formField->rgxp));
                 $submittedData[$formField->name] = $objDate->tstamp;
             }

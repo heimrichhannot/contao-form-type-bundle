@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.13] - 2026-06-30
+- Fixed: creating invalid datetime for empty datetime fields values
+
 ## [0.2.12] - 2026-03-16
 - Fixed: bc break with symfony 5 in 0.2.11
 
