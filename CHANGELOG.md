@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.14] - 2026-07-02
+- Changed: make files editable in ProcessFormDataEvent
+- Deprecated: getter methods in ProcessFormDataEvent
+
 ## [0.2.13] - 2026-06-30
 - Fixed: creating invalid datetime for empty datetime fields values
 
